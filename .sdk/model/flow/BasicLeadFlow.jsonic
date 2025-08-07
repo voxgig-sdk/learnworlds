@@ -1,0 +1,37 @@
+# BasicLeadFlow
+
+main: sdk: flow: BasicLeadFlow:
+{
+  name: "BasicLeadFlow",
+  active: true,
+  param: {
+    LEARNWORLDS_TEST_LEAD_ENTID: {
+      lead01: "LEAD01",
+      lead02: "LEAD02",
+      lead03: "LEAD03"
+    }
+
+    LEARNWORLDS_TEST_LIVE: "FALSE",
+    LEARNWORLDS_TEST_EXPLAIN: "FALSE"
+  }
+
+  test: {
+    entity: {
+      lead: {
+        LEAD01: {
+          id: "LEAD01"
+        }
+
+        LEAD02: {
+          id: "LEAD02"
+        }
+
+        LEAD03: {
+          id: "LEAD03"
+        }
+      }
+    }
+  }
+
+  step: []
+}

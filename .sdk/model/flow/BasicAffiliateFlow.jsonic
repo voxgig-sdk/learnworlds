@@ -1,0 +1,37 @@
+# BasicAffiliateFlow
+
+main: sdk: flow: BasicAffiliateFlow:
+{
+  name: "BasicAffiliateFlow",
+  active: true,
+  param: {
+    LEARNWORLDS_TEST_AFFILIATE_ENTID: {
+      affiliate01: "AFFILIATE01",
+      affiliate02: "AFFILIATE02",
+      affiliate03: "AFFILIATE03"
+    }
+
+    LEARNWORLDS_TEST_LIVE: "FALSE",
+    LEARNWORLDS_TEST_EXPLAIN: "FALSE"
+  }
+
+  test: {
+    entity: {
+      affiliate: {
+        AFFILIATE01: {
+          id: "AFFILIATE01"
+        }
+
+        AFFILIATE02: {
+          id: "AFFILIATE02"
+        }
+
+        AFFILIATE03: {
+          id: "AFFILIATE03"
+        }
+      }
+    }
+  }
+
+  step: []
+}

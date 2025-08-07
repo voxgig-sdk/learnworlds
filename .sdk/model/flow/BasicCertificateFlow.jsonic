@@ -1,0 +1,37 @@
+# BasicCertificateFlow
+
+main: sdk: flow: BasicCertificateFlow:
+{
+  name: "BasicCertificateFlow",
+  active: true,
+  param: {
+    LEARNWORLDS_TEST_CERTIFICATE_ENTID: {
+      certificate01: "CERTIFICATE01",
+      certificate02: "CERTIFICATE02",
+      certificate03: "CERTIFICATE03"
+    }
+
+    LEARNWORLDS_TEST_LIVE: "FALSE",
+    LEARNWORLDS_TEST_EXPLAIN: "FALSE"
+  }
+
+  test: {
+    entity: {
+      certificate: {
+        CERTIFICATE01: {
+          id: "CERTIFICATE01"
+        }
+
+        CERTIFICATE02: {
+          id: "CERTIFICATE02"
+        }
+
+        CERTIFICATE03: {
+          id: "CERTIFICATE03"
+        }
+      }
+    }
+  }
+
+  step: []
+}

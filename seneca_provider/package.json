@@ -1,0 +1,37 @@
+{
+  "name": "@seneca/learnworlds-provider",
+  "version": "0.0.1",
+  "description": "Seneca Provider for $ProjectName",
+  "main": "dist/LearnworldsProvider.js",
+  "type": "commonjs",
+  "types": "dist/LearnworldsProvider.d.ts",
+  "scripts": {
+    "test": "node --enable-source-maps --test dist-test/**/*.test.js",
+    "test-some": "node --enable-source-maps --test-name-pattern=\"$npm_config_pattern\" --test dist-test/**/*.test.js",
+    "test-utility": "node --enable-source-maps --test test/utility/*.test.ts",
+    "watch": "tsc --build src test -w",
+    "build": "tsc --build src test",
+    "clean": "rm -rf node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm run build && npm test"
+  },
+  "author": "Learnworlds",
+  "license": "MIT",
+  "files":[
+    "README.md",
+    "LICENSE",
+    "dist",
+    "src"
+  ],
+  "peerDependencies": {
+    "@seneca/env": ">=0",
+    "@seneca/provider": ">=3",
+    "@voxgig-sdk/learnworlds": ">=0",
+    "seneca-entity": ">=28"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.14",
+    "dotenv": "^16.4.5",
+    "seneca": "^4.0.0-rc5",
+    "typescript": "^5.8.3"
+  }
+}

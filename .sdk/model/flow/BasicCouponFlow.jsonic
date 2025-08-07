@@ -1,0 +1,37 @@
+# BasicCouponFlow
+
+main: sdk: flow: BasicCouponFlow:
+{
+  name: "BasicCouponFlow",
+  active: true,
+  param: {
+    LEARNWORLDS_TEST_COUPON_ENTID: {
+      coupon01: "COUPON01",
+      coupon02: "COUPON02",
+      coupon03: "COUPON03"
+    }
+
+    LEARNWORLDS_TEST_LIVE: "FALSE",
+    LEARNWORLDS_TEST_EXPLAIN: "FALSE"
+  }
+
+  test: {
+    entity: {
+      coupon: {
+        COUPON01: {
+          id: "COUPON01"
+        }
+
+        COUPON02: {
+          id: "COUPON02"
+        }
+
+        COUPON03: {
+          id: "COUPON03"
+        }
+      }
+    }
+  }
+
+  step: []
+}

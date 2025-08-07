@@ -1,0 +1,20 @@
+
+basic: set: [
+  {
+    ctx:response:native:{
+      status: 201,
+      reason: 'OK1'
+      headers: {h1:v1}
+      body: {b:1}
+    }
+    ctx:spec:{}
+    match:ctx:result: {
+      ok: true
+      status: 201
+      reason: 'OK1'
+      headers: {h1:v1}
+      body: {b:1}
+    }
+  }
+]
+

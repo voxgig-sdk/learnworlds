@@ -1,0 +1,37 @@
+# BasicInstallmentFlow
+
+main: sdk: flow: BasicInstallmentFlow:
+{
+  name: "BasicInstallmentFlow",
+  active: true,
+  param: {
+    LEARNWORLDS_TEST_INSTALLMENT_ENTID: {
+      installment01: "INSTALLMENT01",
+      installment02: "INSTALLMENT02",
+      installment03: "INSTALLMENT03"
+    }
+
+    LEARNWORLDS_TEST_LIVE: "FALSE",
+    LEARNWORLDS_TEST_EXPLAIN: "FALSE"
+  }
+
+  test: {
+    entity: {
+      installment: {
+        INSTALLMENT01: {
+          id: "INSTALLMENT01"
+        }
+
+        INSTALLMENT02: {
+          id: "INSTALLMENT02"
+        }
+
+        INSTALLMENT03: {
+          id: "INSTALLMENT03"
+        }
+      }
+    }
+  }
+
+  step: []
+}

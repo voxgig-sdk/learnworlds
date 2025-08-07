@@ -1,0 +1,26 @@
+
+main: sdk: target: ts: {
+  
+  title: TypeScript
+  ext: ts
+  comment: line: "//"
+  module: name: learnworlds
+  base: 'node_modules/@voxgig/sdkgen/project/.sdk'
+
+  deps: &: {
+    # TODO: fix aontu disjunctions!
+    kind: *'prod' | string # 'peer' |'dev'
+  }
+  
+  deps: {
+    'dotenv': { active: true, version: '^16.4.5', kind: dev }
+    'typescript': { active: true, version: '^5.8.3', kind: dev }
+    '@types/node': { active: true, version: '^22.15.3', kind: dev }
+  }
+}
+
+
+main: sdk: feature: &: target: ts: deps: &: {
+  # TODO: fix aontu disjunctions!
+  kind: *'prod' | string # 'peer' |'dev'
+}

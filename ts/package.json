@@ -1,0 +1,32 @@
+{
+  "name": "@voxgig-sdk/learnworlds",
+  "version": "0.0.1",
+  "description": "DESCRIPTION",
+  "main": "dist/LearnworldsSDK.js",
+  "type": "commonjs",
+  "types": "dist/LearnworldsSDK.d.ts",
+  "scripts": {
+    "test": "node --enable-source-maps --test dist-test/**/*.test.js",
+    "test-some": "node --enable-source-maps --test-name-pattern=\"$npm_config_pattern\" --test dist-test/**/*.test.js",
+    "test-utility": "node --enable-source-maps --test test/utility/*.test.ts",
+    "watch": "tsc --build src test -w",
+    "build": "tsc --build src test",
+    "clean": "rm -rf node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm run build && npm test"
+  },
+  "author": "Learnworlds",
+  "license": "MIT",
+  "files": [
+    "src",
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "dependencies": {},
+  "peerDependencies": {},
+  "devDependencies": {
+    "dotenv": "^16.4.5",
+    "typescript": "^5.8.3",
+    "@types/node": "^22.15.3"
+  }
+}

@@ -1,0 +1,110 @@
+# BasicUserGroupFlow
+
+main: sdk: flow: BasicUserGroupFlow:
+{
+  name: "BasicUserGroupFlow",
+  active: true,
+  param: {
+    LEARNWORLDS_TEST_USER_GROUP_ENTID: {
+      user_group01: "USER_GROUP01",
+      user_group02: "USER_GROUP02",
+      user_group03: "USER_GROUP03"
+    }
+
+    LEARNWORLDS_TEST_LIVE: "FALSE",
+    LEARNWORLDS_TEST_EXPLAIN: "FALSE"
+  }
+
+  test: {
+    entity: {
+      user_group: {
+        USER_GROUP01: {
+          id: "USER_GROUP01",
+          title: "s1",
+          description: "s2",
+          products: {}
+
+          enroll_users_on_courses: true,
+          group_managers: [],
+          tags: [],
+          created: 7,
+          modified: 8
+        }
+
+        USER_GROUP02: {
+          id: "USER_GROUP02",
+          title: "s5b",
+          description: "s5c",
+          products: {}
+
+          enroll_users_on_courses: true,
+          group_managers: [],
+          tags: [],
+          created: 97,
+          modified: 98
+        }
+
+        USER_GROUP03: {
+          id: "USER_GROUP03",
+          title: "sb5",
+          description: "sb6",
+          products: {}
+
+          enroll_users_on_courses: true,
+          group_managers: [],
+          tags: [],
+          created: 187,
+          modified: 188
+        }
+      }
+    }
+  }
+
+  step: [
+    {
+      name: "load_user_group0",
+      kind: "entity",
+      entity: "user_group",
+      action: "load",
+      match: {
+        id: "`dm$=p.LEARNWORLDS_TEST_USER_GROUP_ENTID.user_group01`"
+      }
+
+      valid: {
+        "`$OPEN`": true,
+        id: "`dm$=s.load_user_group0.match.id`"
+      }
+    }
+
+    {
+      name: "update_user_group1",
+      ref: "load_user_group0",
+      action: "update",
+      reqdata: {
+        title: "s1-`$WHEN`"
+      }
+
+      valid: {
+        "`$OPEN`": true,
+        id: "`dm$=s.load_user_group0.match.id`",
+        title: "`dm$=s.update_user_group1.reqdata.title`"
+      }
+    }
+
+    {
+      name: "load_user_group2",
+      kind: "entity",
+      entity: "user_group",
+      action: "load",
+      match: {
+        id: "`dm$=p.LEARNWORLDS_TEST_USER_GROUP_ENTID.user_group01`"
+      }
+
+      valid: {
+        "`$OPEN`": true,
+        id: "`dm$=s.load_user_group0.match.id`",
+        title: "`dm$=s.update_user_group1.reqdata.title`"
+      }
+    }
+  ]
+}

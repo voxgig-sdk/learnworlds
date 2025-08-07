@@ -1,0 +1,36 @@
+
+
+main: sdk: target: seneca_provider: {
+  
+  title: 'Seneca Provider'
+  ext: ts
+  comment: line: "//"
+  module: name: learnworlds
+  base: 'node_modules/@seneca/provider-project/.sdk'
+  
+  deps: &: {
+    # TODO: fix aontu disjunctions!
+    kind: *'prod' | string # 'peer' |'dev'
+  }
+  
+  deps: {
+    'seneca-entity': { active: true, version: '>=28', kind: peer }
+    '@seneca/provider': { active: true, version: '>=3', kind: peer }
+    '@seneca/env': { active: true, version: '>=0', kind: peer }
+
+    'seneca': { active: true, version: '^4.0.0-rc5', kind: dev }
+    'dotenv': { active: true, version: '^16.4.5', kind: dev }
+    'typescript': { active: true, version: '^5.8.3', kind: dev }
+    '@types/node': { active: true, version: '^24.0.14', kind: dev }
+  }
+
+  meta: {
+    origin: 'seneca'
+  }
+}
+
+
+main: sdk: feature: &: target: seneca_provider: deps: &: {
+  # TODO: fix aontu disjunctions!
+  kind: *'prod' | string # 'peer' |'dev'
+}

@@ -1,0 +1,38 @@
+{
+  "name": "build-learnworlds-sdk",
+  "version": "0.0.1",
+  "description": "Learnworlds SDK Project",
+  "scripts": {
+    "generate": "voxgig-model model/sdk.jsonic",
+    "watch-generate": "voxgig-model -w model/sdk.jsonic",
+    "dry-generate": "voxgig-model -y model/sdk.jsonic",
+    "watch-dry-generate": "voxgig-model -w -y model/sdk.jsonic",
+    "test-model": "voxgig-model test/test.jsonic",
+    "watch-test-model": "voxgig-model -w test/test.jsonic",
+    "watch": "tsc --build src -w",
+    "build": "tsc --build src",
+    "test": "echo no-test",
+    "clean": "rm -rf node_modules yarn.lock package-lock.json",
+    "reset": "npm run clean && npm i && npm run build && npm test",
+    "add-target": "voxgig-sdkgen target add",
+    "dry-add-target": "voxgig-sdkgen -y target add",
+    "add-feature": "voxgig-sdkgen feature add",
+    "dry-add-feature": "voxgig-sdkgen -y feature add"
+  },
+  "author": "Learnworlds",
+  "license": "$$const.License$$",
+  "devDependencies": {
+    "@types/node": ">=24",
+    "patch-package": ">=8",
+    "typescript": ">=5"
+  },
+  "dependencies": {
+    "@seneca/provider-project": "^0.0.1",
+    "@voxgig/apidef": ">=2",
+    "@voxgig/model": ">=7",
+    "@voxgig/sdkgen": ">=0",
+    "@voxgig/struct": ">=0",
+    "@voxgig/util": ">=0",
+    "jostraca": ">=0"
+  }
+}
