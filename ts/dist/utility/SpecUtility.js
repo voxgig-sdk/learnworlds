@@ -3,18 +3,20 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.spec = spec;
 // Create request specificaton.
 function spec(ctx) {
-    const { client, op, utility } = ctx;
+    if (ctx.out.spec) {
+        return ctx.out.spec;
+    }
+    const { op, utility, options } = ctx;
     const struct = utility.struct;
     const size = struct.size;
     const select = struct.select;
     const { method, params, query, headers, body, auth } = utility;
-    let options = client.options();
     ctx.spec = {
         base: options.base, // string, URL endpoint base prefix,
         prefix: options.prefix,
         path: op.path,
         suffix: options.suffix,
-        method: 'get',
+        method: 'GET',
         params: {},
         query: {},
         headers: {},
@@ -23,6 +25,10 @@ function spec(ctx) {
         alias: {}
     };
     ctx.spec.method = method(ctx);
+    if (!options.allow.method.includes(ctx.spec.method)) {
+        return Error('Method "' + ctx.spec.method +
+            '" not allowed by SDK option allow.method value: "' + options.allow.method + '"');
+    }
     ctx.spec.params = params(ctx);
     ctx.spec.query = query(ctx);
     ctx.spec.headers = headers(ctx);
@@ -44,6 +50,7 @@ function spec(ctx) {
     if (ctx.ctrl.explain) {
         ctx.ctrl.explain.spec = ctx.spec;
     }
-    auth(ctx);
+    const spec = auth(ctx);
+    return spec;
 }
 //# sourceMappingURL=SpecUtility.js.map

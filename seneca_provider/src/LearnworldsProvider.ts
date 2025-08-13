@@ -1,42 +1,42 @@
 // Learnworlds Seneca Provider
 
 import { makeAffiliateActions } from './entity/AffiliateEntity'
-import { makeUserActions } from './entity/UserEntity'
-import { makePaymentActions } from './entity/PaymentEntity'
-import { makePayoutCompletedActions } from './entity/PayoutCompletedEntity'
-import { makePayoutDueActions } from './entity/PayoutDueEntity'
-import { makePayoutDueUpcomingActions } from './entity/PayoutDueUpcomingEntity'
-import { makeUserResponseActions } from './entity/UserResponseEntity'
 import { makeBundleActions } from './entity/BundleEntity'
 import { makeCertificateActions } from './entity/CertificateEntity'
 import { makeCommunityCollectionActions } from './entity/CommunityCollectionEntity'
 import { makeCommunityPostActions } from './entity/CommunityPostEntity'
 import { makeCommunitySpaceActions } from './entity/CommunitySpaceEntity'
-import { makeSpaceActions } from './entity/SpaceEntity'
+import { makeCompleteActions } from './entity/CompleteEntity'
+import { makeCouponActions } from './entity/CouponEntity'
+import { makeCouponUsageActions } from './entity/CouponUsageEntity'
 import { makeCourseActions } from './entity/CourseEntity'
 import { makeCourseAnalyticActions } from './entity/CourseAnalyticEntity'
 import { makeCourseContentActions } from './entity/CourseContentEntity'
-import { makeGradeActions } from './entity/GradeEntity'
-import { makeUnitAnalyticActions } from './entity/UnitAnalyticEntity'
+import { makeEnrollmentActions } from './entity/EnrollmentEntity'
 import { makeEventLogActions } from './entity/EventLogEntity'
+import { makeGradeActions } from './entity/GradeEntity'
 import { makeInstallmentActions } from './entity/InstallmentEntity'
-import { makeLeadActions } from './entity/LeadEntity'
 import { makeInvoiceLinkActions } from './entity/InvoiceLinkEntity'
+import { makeLeadActions } from './entity/LeadEntity'
+import { makePaymentActions } from './entity/PaymentEntity'
+import { makePayoutCompletedActions } from './entity/PayoutCompletedEntity'
+import { makePayoutDueActions } from './entity/PayoutDueEntity'
+import { makePayoutDueUpcomingActions } from './entity/PayoutDueUpcomingEntity'
+import { makeProductActions } from './entity/ProductEntity'
 import { makePromotionActions } from './entity/PromotionEntity'
-import { makeCouponActions } from './entity/CouponEntity'
-import { makeCouponUsageActions } from './entity/CouponUsageEntity'
+import { makeResetActions } from './entity/ResetEntity'
 import { makeSchoolEventActions } from './entity/SchoolEventEntity'
 import { makeSeatActions } from './entity/SeatEntity'
+import { makeSpaceActions } from './entity/SpaceEntity'
 import { makeSubscriptionPlanActions } from './entity/SubscriptionPlanEntity'
-import { makeUserRoleActions } from './entity/UserRoleEntity'
-import { makeUserSubscriptionActions } from './entity/UserSubscriptionEntity'
+import { makeUnitAnalyticActions } from './entity/UnitAnalyticEntity'
+import { makeUserActions } from './entity/UserEntity'
 import { makeUserGroupActions } from './entity/UserGroupEntity'
-import { makeUserSegmentActions } from './entity/UserSegmentEntity'
-import { makeEnrollmentActions } from './entity/EnrollmentEntity'
-import { makeCompleteActions } from './entity/CompleteEntity'
 import { makeUserProgressActions } from './entity/UserProgressEntity'
-import { makeResetActions } from './entity/ResetEntity'
-import { makeProductActions } from './entity/ProductEntity'
+import { makeUserResponseActions } from './entity/UserResponseEntity'
+import { makeUserRoleActions } from './entity/UserRoleEntity'
+import { makeUserSegmentActions } from './entity/UserSegmentEntity'
+import { makeUserSubscriptionActions } from './entity/UserSubscriptionEntity'
 
 /* Copyright © 2025 Seneca Project Contributors, MIT License. */
 
@@ -74,18 +74,6 @@ function LearnworldsProvider(this: any, options: LearnworldsProviderOptions) {
 
   entdef.affiliate = makeAffiliateActions()
 
-  entdef.user = makeUserActions()
-
-  entdef.payment = makePaymentActions()
-
-  entdef.payout_completed = makePayoutCompletedActions()
-
-  entdef.payout_due = makePayoutDueActions()
-
-  entdef.payout_due_upcoming = makePayoutDueUpcomingActions()
-
-  entdef.user_response = makeUserResponseActions()
-
   entdef.bundle = makeBundleActions()
 
   entdef.certificate = makeCertificateActions()
@@ -96,7 +84,11 @@ function LearnworldsProvider(this: any, options: LearnworldsProviderOptions) {
 
   entdef.community_space = makeCommunitySpaceActions()
 
-  entdef.space = makeSpaceActions()
+  entdef.complete = makeCompleteActions()
+
+  entdef.coupon = makeCouponActions()
+
+  entdef.coupon_usage = makeCouponUsageActions()
 
   entdef.course = makeCourseActions()
 
@@ -104,50 +96,63 @@ function LearnworldsProvider(this: any, options: LearnworldsProviderOptions) {
 
   entdef.course_content = makeCourseContentActions()
 
-  entdef.grade = makeGradeActions()
-
-  entdef.unit_analytic = makeUnitAnalyticActions()
+  entdef.enrollment = makeEnrollmentActions()
 
   entdef.event_log = makeEventLogActions()
 
-  entdef.installment = makeInstallmentActions()
+  entdef.grade = makeGradeActions()
 
-  entdef.lead = makeLeadActions()
+  entdef.installment = makeInstallmentActions()
 
   entdef.invoice_link = makeInvoiceLinkActions()
 
+  entdef.lead = makeLeadActions()
+
+  entdef.payment = makePaymentActions()
+
+  entdef.payout_completed = makePayoutCompletedActions()
+
+  entdef.payout_due = makePayoutDueActions()
+
+  entdef.payout_due_upcoming = makePayoutDueUpcomingActions()
+
+  entdef.product = makeProductActions()
+
   entdef.promotion = makePromotionActions()
 
-  entdef.coupon = makeCouponActions()
-
-  entdef.coupon_usage = makeCouponUsageActions()
+  entdef.reset = makeResetActions()
 
   entdef.school_event = makeSchoolEventActions()
 
   entdef.seat = makeSeatActions()
 
+  entdef.space = makeSpaceActions()
+
   entdef.subscription_plan = makeSubscriptionPlanActions()
 
-  entdef.user_role = makeUserRoleActions()
+  entdef.unit_analytic = makeUnitAnalyticActions()
 
-  entdef.user_subscription = makeUserSubscriptionActions()
+  entdef.user = makeUserActions()
 
   entdef.user_group = makeUserGroupActions()
 
-  entdef.user_segment = makeUserSegmentActions()
-
-  entdef.enrollment = makeEnrollmentActions()
-
-  entdef.complete = makeCompleteActions()
-
   entdef.user_progress = makeUserProgressActions()
 
-  entdef.reset = makeResetActions()
+  entdef.user_response = makeUserResponseActions()
 
-  entdef.product = makeProductActions()
+  entdef.user_role = makeUserRoleActions()
+
+  entdef.user_segment = makeUserSegmentActions()
+
+  entdef.user_subscription = makeUserSubscriptionActions()
 
 
 
+
+<<<<<<< GENERATED: 2025-08-13T14:00:21.990Z/merge
+
+=======
+>>>>>>> EXISTING: 2025-08-12T11:55:51.973Z/merge
   entityBuilder(this, {
     provider: {
       name: 'learnworlds',

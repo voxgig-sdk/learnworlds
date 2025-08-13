@@ -17,7 +17,9 @@ function findparam(ctx, key) {
         val = (0, StructUtility_1.getprop)(match, key);
     }
     if (null == val && null != akey) {
-        spec.alias[akey] = key;
+        if (null != spec) {
+            spec.alias[akey] = key;
+        }
         val = (0, StructUtility_1.getprop)(reqmatch, akey);
     }
     if (null == val) {

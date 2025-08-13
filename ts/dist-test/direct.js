@@ -16,12 +16,17 @@ async function run() {
             apikey: process.env.LEARNWORLDS_APIKEY,
             headers: {
                 'Lw-Client': process.env.LEARNWORLDS_CLIENTID
+            },
+            allow: {
+            // op: ''
+            // method: ''
             }
         };
         // console.log(opts)
         const client = new __1.LearnworldsSDK(opts);
+        // console.log(client.options())
         let q = {};
-        // works
+        // // works
         const u0 = client.User();
         q = {
             id: useridmap.user01

@@ -1,3 +1,3 @@
-import { Context } from '../types';
-declare function auth(ctx: Context): import("../types").Spec;
+import { Context, Spec } from '../types';
+declare function auth(ctx: Context): Spec | Error;
 export { auth };

@@ -4,22 +4,22 @@
 
 ```mermaid 
 flowchart LR
-  Affiliate --> User
+  Course --> Complete
+  Promotion --> Coupon
+  Coupon --> CouponUsage
+  Course --> CourseAnalytic
+  Course --> CourseContent
+  User --> Enrollment
+  Course --> Grade
+  Payment --> InvoiceLink
   Affiliate --> Payment
   Affiliate --> PayoutCompleted
   Affiliate --> PayoutDue
   Affiliate --> PayoutDueUpcoming
-  Course --> CourseAnalytic
-  Course --> CourseContent
-  Course --> Grade
-  Payment --> InvoiceLink
-  Promotion --> Coupon
-  Coupon --> CouponUsage
-  User --> Enrollment
-  Course --> Complete
-  Course --> UserProgress
-  Course --> Reset
   User --> Product
+  Course --> Reset
+  Affiliate --> User
+  Course --> UserProgress
 
 ```
 

@@ -1,26 +1,7 @@
 
 import { LearnworldsSDK } from './LearnworldsSDK'
 
-import { Utility } from './utility/Utility'
-
-type Context = {
-  ctrl: any
-  client: LearnworldsSDK
-  op: Operation
-  spec: Spec
-  result: Result
-  utility: Utility
-  entopts: any
-  options: any
-  config: any
-  response: any
-  entity: any
-  data: any
-  match: any
-  reqdata: any
-  reqmatch: any
-  work: any
-}
+import { Context } from './utility/ContextUtility'
 
 
 type Operation = {
@@ -54,6 +35,15 @@ type Spec = {
   body: any
   path: string
   url?: string
+}
+
+
+type Response = {
+  status: number,
+  statusText: string,
+  headers: any,
+  json: Function,
+  err?: Error,
 }
 
 
@@ -111,4 +101,6 @@ export type {
   Control,
   FeatureOptions,
   Feature,
+  Response,
+  Result,
 }

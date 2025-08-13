@@ -64,9 +64,9 @@ describe('UserRoleEntity', async () => {
       if( explain ) { console.log('update_user_role1: ', ctrl.explain) }
       makeValid(dm, validate, update_user_role1.resdata, {
         "`$OPEN`": true,
+        "email": "`dm$=s.update_user_role1.reqdata.email`",
         "id": "`dm$=s.load_user_role0.match.id`",
-        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`",
-        "email": "`dm$=s.update_user_role1.reqdata.email`"
+        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`"
       })
 
       // Step: load_user_role2 - load user_role
@@ -81,15 +81,16 @@ describe('UserRoleEntity', async () => {
       if( explain ) { console.log('load_user_role2: ', ctrl.explain) }
       makeValid(dm, validate, load_user_role2.resdata, {
         "`$OPEN`": true,
+        "email": "`dm$=s.update_user_role1.reqdata.email`",
         "id": "`dm$=s.load_user_role0.match.id`",
-        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`",
-        "email": "`dm$=s.update_user_role1.reqdata.email`"
+        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`"
       })
  
     }
     catch(err: any) {
       console.dir(dm, {depth: null})
       if( explain ) { console.dir(ctrl.explain, {depth: null}) }
+      console.log(err)
       throw err
     }
 
@@ -175,7 +176,7 @@ function basicSetup(extra?: any) {
   
   setup.client = client    
   setup.struct = client.utility().struct
-  setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN
+  setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN
 
   return setup
 }

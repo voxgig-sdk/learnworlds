@@ -23,7 +23,10 @@ function findparam(ctx: Context, key: string) {
   }
 
   if (null == val && null != akey) {
-    spec.alias[akey] = key
+
+    if (null != spec) {
+      spec.alias[akey] = key
+    }
 
     val = getprop(reqmatch, akey)
   }

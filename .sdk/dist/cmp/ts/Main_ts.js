@@ -58,7 +58,7 @@ const Main = (0, sdkgen_1.cmp)(async function Main(props) {
                 replace: {
                     ...props.ctx$.stdrep,
                     '#BuildFeatures': ({ indent }) => {
-                        (0, sdkgen_1.List)({ item: feature, line: false }, ({ item }) => (0, sdkgen_1.Line)({ indent }, `addfeature(ctx, new ${item.Name}Feature())`));
+                        (0, sdkgen_1.List)({ item: feature, line: false }, ({ item }) => (0, sdkgen_1.Line)({ indent }, `addfeature(this._rootctx, new ${item.Name}Feature())`));
                     },
                     '#Feature-Hook': ({ name, indent }) => (0, sdkgen_1.Content)({ indent }, `
 fres = featurehook(ctx, '${name}')

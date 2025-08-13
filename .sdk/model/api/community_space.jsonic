@@ -5,6 +5,57 @@ main: api: entity: community_space: {
   alias: field: {}
 
   op: {
+    create: {
+      path: "/v2/community/spaces",
+      pathalt: [
+        {
+          path: "/v2/community/spaces"
+        }
+      ],
+      method: "post",
+      kind: "req",
+      param: {}
+
+      query: {
+        "Lw-Client": {
+          required: true,
+          name: "lw-client",
+          Name: "LwClient",
+          NAME: "LW-CLIENT",
+          type: "string",
+          Type: "String",
+          TYPE: "STRING"
+        }
+
+        Authorization: {
+          required: true,
+          name: "authorization",
+          Name: "Authorization",
+          NAME: "AUTHORIZATION",
+          type: "string",
+          Type: "String",
+          TYPE: "STRING"
+        }
+      }
+
+
+      # resform derivation: default
+      resform: "`body`",
+
+      # reqform derivation: default
+      reqform: "`reqdata`",
+      validate: {
+        params: {
+          "Lw-Client": "`$STRING`",
+          Authorization: "`$STRING`"
+        }
+      }
+
+      name: "create",
+      Name: "Create",
+      NAME: "CREATE"
+    }
+
     list: {
       path: "/v2/community/spaces",
       pathalt: [
@@ -100,57 +151,6 @@ main: api: entity: community_space: {
       name: "list",
       Name: "List",
       NAME: "LIST"
-    }
-
-    create: {
-      path: "/v2/community/spaces",
-      pathalt: [
-        {
-          path: "/v2/community/spaces"
-        }
-      ],
-      method: "post",
-      kind: "req",
-      param: {}
-
-      query: {
-        "Lw-Client": {
-          required: true,
-          name: "lw-client",
-          Name: "LwClient",
-          NAME: "LW-CLIENT",
-          type: "string",
-          Type: "String",
-          TYPE: "STRING"
-        }
-
-        Authorization: {
-          required: true,
-          name: "authorization",
-          Name: "Authorization",
-          NAME: "AUTHORIZATION",
-          type: "string",
-          Type: "String",
-          TYPE: "STRING"
-        }
-      }
-
-
-      # resform derivation: default
-      resform: "`body`",
-
-      # reqform derivation: default
-      reqform: "`reqdata`",
-      validate: {
-        params: {
-          "Lw-Client": "`$STRING`",
-          Authorization: "`$STRING`"
-        }
-      }
-
-      name: "create",
-      Name: "Create",
-      NAME: "CREATE"
     }
 
     load: {

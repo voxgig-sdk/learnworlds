@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.resbasic = resbasic;
 function resbasic(ctx) {
     const { response, result } = ctx;
-    if (null != response) {
+    if (null != result && null != response) {
         result.status = response.status || -1;
         result.statusText = response.statusText || 'no-status';
         // TODO: use spec!

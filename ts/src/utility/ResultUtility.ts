@@ -1,11 +1,29 @@
 
-import { Context } from '../types'
+import { Result, Context } from '../types'
 
 
-async function result(ctx: Context) {
-  let { op, spec, utility, entity, result } = ctx
+function result(ctx: Context): Result | Error {
+  // PreResult feature hook has already provided a result.
+  if (ctx.out.result) {
+    return ctx.out.result
+  }
 
-  const { resform } = utility
+  const utility = ctx.utility
+  const resform = utility.resform
+
+  const op = ctx.op
+  const entity = ctx.entity
+
+  const spec = ctx.spec
+  const result = ctx.result
+
+  if (null == spec) {
+    return new Error('Expected context spec property to be defined.')
+  }
+
+  if (null == result) {
+    return new Error('Expected context result property to be defined.')
+  }
 
   spec.step = 'result'
 
@@ -28,6 +46,8 @@ async function result(ctx: Context) {
     ctx.ctrl.explain.result = result
   }
 
+  // NOTE: returns processesd result.
+  return result
 }
 
 

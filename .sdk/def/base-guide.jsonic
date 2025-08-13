@@ -1,6 +1,6 @@
 # Guide
 
-main: api: guide: { 
+main: api: guide: {
 
 entity: affiliate: { # name:cmp
   path: '/v2/affiliates': op: { # ent:cmp:affiliate
@@ -11,59 +11,136 @@ entity: affiliate: { # name:cmp
   }
 }
 
-entity: user: { # name:cmp
-  path: '/v2/affiliates/{affiliate_id}/customers': op: { # ent:cmp:user
-    'list': method: get # two-prop:data;listent:user
+entity: bundle: { # name:cmp
+  path: '/v2/bundles': op: { # ent:cmp:bundle
+    'list': method: get # two-prop:data;listent:bundle
   }
-  path: '/v2/affiliates/{affiliate_id}/leads': op: { # ent:cmp:user
-    'list': method: get # two-prop:data;listent:user
-  }
-  path: '/v2/community/spaces/{space_id}/users': op: { # ent:path:users
-    'list': method: get # two-prop:data
-    'create': method: post # not-load
-  }
-  path: '/v2/community/spaces/{space_id}/users/{uid}': op: { # ent:path:users
-    'remove': method: delete # not-load
-  }
-  path: '/v2/courses/{course_id}/users': op: { # ent:cmp:user
-    'list': method: get # two-prop:data;listent:user
-  }
-  path: '/v2/seats/{seat_id}/users': op: { # ent:cmp:user
-    'list': method: get # array
-  }
-  path: '/v2/seats/{seat_id}/users/{uid}': op: { # ent:path:users
-    'create': method: post # not-load
-    'remove': method: delete # not-load
-  }
-  path: '/v2/user_groups/{user_group_id}/users': op: { # ent:cmp:user
-    'list': method: get # array
-  }
-  path: '/v2/user_groups/{user_group_id}/users/{uid}': op: { # ent:path:users
-    'create': method: post # not-load
-    'remove': method: delete # not-load
-  }
-  path: '/v2/users': op: { # ent:cmp:user
-    'list': method: get # two-prop:data;listent:user
-    'create': method: post # not-load
-  }
-  path: '/v2/users/by-product': op: { # ent:cmp:user
-    'list': method: get # two-prop:data;listent:user
-  }
-  path: '/v2/users/by-segment': op: { # ent:cmp:user
-    'list': method: get # two-prop:data;listent:user
-  }
-  path: '/v2/users/{id}': op: { # ent:cmp:user
-    'update': method: put # not-load
+  path: '/v2/bundles/{id}': op: { # ent:cmp:bundle
     'load': method: get # not-list
   }
-  path: '/v2/users/{user_id}/suspend': op: { # ent:cmp:user
+}
+
+entity: certificate: { # name:cmp
+  path: '/v2/certificates': op: { # ent:cmp:certificate
+    'list': method: get # two-prop:data;listent:certificate
+  }
+  path: '/v2/certificates/{id}': op: { # ent:cmp:certificate
+    'remove': method: delete # not-load
     'update': method: put # not-load
   }
-  path: '/v2/users/{user_id}/tags': op: { # ent:cmp:user
+}
+
+entity: community_collection: { # name:cmp
+  path: '/v2/community/collections': op: { # ent:cmp:community_collection
+    'list': method: get # one-prop:data;listent:community_collection
+  }
+}
+
+entity: community_post: { # name:cmp
+  path: '/v2/community/posts': op: { # ent:cmp:community_post
+    'list': method: get # two-prop:data;listent:community_post
+  }
+  path: '/v2/community/posts/{id}': op: { # ent:cmp:community_post
+    'load': method: get # not-list
+  }
+}
+
+entity: community_space: { # name:cmp
+  path: '/v2/community/spaces': op: { # ent:cmp:community_space
+    'create': method: post # not-load
+    'list': method: get # two-prop:data;listent:community_space
+  }
+  path: '/v2/community/spaces/{id}': op: { # ent:cmp:community_space
+    'load': method: get # not-list
     'update': method: put # not-load
   }
-  path: '/v2/users/{user_id}/unsuspend': op: { # ent:cmp:user
+}
+
+entity: complete: { # name:path:complete
+  path: '/v2/users/{user_id}/courses/{cid}/complete': op: { # ent:path:complete
+    'create': method: post # not-load
+  }
+}
+
+entity: coupon: { # name:cmp
+  path: '/v2/promotions/{pid}/coupons': op: { # ent:cmp:coupon
+    'create': method: post # not-load
+    'list': method: get # one-prop:data;listent:coupon
+  }
+  path: '/v2/promotions/{promotion_id}/coupons-bulk': op: { # ent:cmp:coupon
+    'create': method: post # not-load
+  }
+}
+
+entity: coupon_usage: { # name:cmp
+  path: '/v2/promotions/{pid}/coupons/{cid}/usage': op: { # ent:cmp:coupon_usage
+    'load': method: get # not-list
+  }
+}
+
+entity: course: { # name:cmp
+  path: '/v2/courses': op: { # ent:cmp:course
+    'create': method: post # not-load
+    'list': method: get # two-prop:data;listent:course
+  }
+  path: '/v2/courses/{id}': op: { # ent:cmp:course
+    'load': method: get # not-list
     'update': method: put # not-load
+  }
+}
+
+entity: course_analytic: { # name:cmp
+  path: '/v2/courses/{course_id}/analytics': op: { # ent:cmp:course_analytic
+    'load': method: get # not-list
+  }
+}
+
+entity: course_content: { # name:cmp
+  path: '/v2/courses/{course_id}/contents': op: { # ent:cmp:course_content
+    'load': method: get # not-list
+  }
+  path: '/v2/courses/{course_id}/sections': op: { # ent:cmp:course_content
+    'create': method: post # not-load
+  }
+}
+
+entity: enrollment: { # name:cmp
+  path: '/v2/users/{user_id}/courses': op: { # ent:cmp:enrollment
+    'list': method: get # two-prop:data;listent:enrollment
+  }
+  path: '/v2/users/{user_id}/enrollment': op: { # ent:path:enrollment
+    'create': method: post # not-load
+    'remove': method: delete # not-load
+  }
+}
+
+entity: event_log: { # name:cmp
+  path: '/v2/event-logs': op: { # ent:cmp:event_log
+    'list': method: get # two-prop:data;listent:event_log
+  }
+}
+
+entity: grade: { # name:cmp
+  path: '/v2/courses/{course_id}/grades': op: { # ent:cmp:grade
+    'list': method: get # two-prop:data;listent:grade
+  }
+}
+
+entity: installment: { # name:cmp
+  path: '/v2/installments/active': op: { # ent:cmp:installment
+    'list': method: get # two-prop:data;listent:installment
+  }
+}
+
+entity: invoice_link: { # name:path:invoice-link
+  path: '/v2/payments/{payment_id}/invoice-link': op: { # ent:path:invoice-link
+    'load': method: get # not-list
+  }
+}
+
+entity: lead: { # name:cmp
+  path: '/v2/leads': op: { # ent:cmp:lead
+    'list': method: get # two-prop:data;listent:lead
   }
 }
 
@@ -97,154 +174,25 @@ entity: payout_due_upcoming: { # name:cmp
   }
 }
 
-entity: user_response: { # name:cmp
-  path: '/v2/assessments/scores/{score_id}/review': op: { # ent:cmp:user_response
-    'create': method: post # not-load
-  }
-  path: '/v2/assessments/{assessment_id}/responses': op: { # ent:cmp:user_response
-    'list': method: get # two-prop:data;listent:user_response
-  }
-  path: '/v2/forms/{form_id}/responses': op: { # ent:cmp:user_response
-    'list': method: get # two-prop:data;listent:user_response
-  }
-}
-
-entity: bundle: { # name:cmp
-  path: '/v2/bundles': op: { # ent:cmp:bundle
-    'list': method: get # two-prop:data;listent:bundle
-  }
-  path: '/v2/bundles/{id}': op: { # ent:cmp:bundle
-    'load': method: get # not-list
-  }
-}
-
-entity: certificate: { # name:cmp
-  path: '/v2/certificates': op: { # ent:cmp:certificate
-    'list': method: get # two-prop:data;listent:certificate
-  }
-  path: '/v2/certificates/{id}': op: { # ent:path:certificates
-    'update': method: put # not-load
-    'remove': method: delete # not-load
-  }
-}
-
-entity: community_collection: { # name:cmp
-  path: '/v2/community/collections': op: { # ent:cmp:community_collection
-    'list': method: get # one-prop:data;listent:community_collection
-  }
-}
-
-entity: community_post: { # name:cmp
-  path: '/v2/community/posts': op: { # ent:cmp:community_post
-    'list': method: get # two-prop:data;listent:community_post
-  }
-  path: '/v2/community/posts/{id}': op: { # ent:cmp:community_post
-    'load': method: get # not-list
-  }
-}
-
-entity: community_space: { # name:cmp
-  path: '/v2/community/spaces': op: { # ent:cmp:community_space
-    'list': method: get # two-prop:data;listent:community_space
-    'create': method: post # not-load
-  }
-  path: '/v2/community/spaces/{id}': op: { # ent:cmp:community_space
-    'load': method: get # not-list
-    'update': method: put # not-load
-  }
-}
-
-entity: space: { # name:path:spaces
-  path: '/v2/community/spaces/{id}': op: { # ent:path:spaces
-    'remove': method: delete # not-load
-  }
-}
-
-entity: course: { # name:cmp
-  path: '/v2/courses': op: { # ent:cmp:course
-    'list': method: get # two-prop:data;listent:course
-    'create': method: post # not-load
-  }
-  path: '/v2/courses/{id}': op: { # ent:cmp:course
-    'load': method: get # not-list
-    'update': method: put # not-load
-  }
-}
-
-entity: course_analytic: { # name:cmp
-  path: '/v2/courses/{course_id}/analytics': op: { # ent:cmp:course_analytic
-    'load': method: get # not-list
-  }
-}
-
-entity: course_content: { # name:cmp
-  path: '/v2/courses/{course_id}/contents': op: { # ent:cmp:course_content
-    'load': method: get # not-list
-  }
-  path: '/v2/courses/{course_id}/sections': op: { # ent:cmp:course_content
-    'create': method: post # not-load
-  }
-}
-
-entity: grade: { # name:cmp
-  path: '/v2/courses/{course_id}/grades': op: { # ent:cmp:grade
-    'list': method: get # two-prop:data;listent:grade
-  }
-}
-
-entity: unit_analytic: { # name:cmp
-  path: '/v2/courses/{course_id}/units/{uid}/analytics': op: { # ent:cmp:unit_analytic
-    'load': method: get # not-list
-  }
-}
-
-entity: event_log: { # name:cmp
-  path: '/v2/event-logs': op: { # ent:cmp:event_log
-    'list': method: get # two-prop:data;listent:event_log
-  }
-}
-
-entity: installment: { # name:cmp
-  path: '/v2/installments/active': op: { # ent:cmp:installment
-    'list': method: get # two-prop:data;listent:installment
-  }
-}
-
-entity: lead: { # name:cmp
-  path: '/v2/leads': op: { # ent:cmp:lead
-    'list': method: get # two-prop:data;listent:lead
-  }
-}
-
-entity: invoice_link: { # name:path:invoice-link
-  path: '/v2/payments/{payment_id}/invoice-link': op: { # ent:path:invoice-link
-    'load': method: get # not-list
+entity: product: { # name:cmp
+  path: '/v2/users/{user_id}/products': op: { # ent:cmp:product
+    'list': method: get # one-prop:data;listent:product
   }
 }
 
 entity: promotion: { # name:cmp
   path: '/v2/promotions': op: { # ent:path:promotions
-    'list': method: get # two-prop:data;listent:promotion
     'create': method: post # not-load
+    'list': method: get # two-prop:data;listent:promotion
   }
   path: '/v2/promotions/{id}': op: { # ent:cmp:promotion
     'load': method: get # not-list
   }
 }
 
-entity: coupon: { # name:cmp
-  path: '/v2/promotions/{pid}/coupons': op: { # ent:cmp:coupon
-    'list': method: get # one-prop:data;listent:coupon
+entity: reset: { # name:path:reset
+  path: '/v2/users/{user_id}/courses/{cid}/reset': op: { # ent:path:reset
     'create': method: post # not-load
-  }
-  path: '/v2/promotions/{promotion_id}/coupons-bulk': op: { # ent:cmp:coupon
-    'create': method: post # not-load
-  }
-}
-
-entity: coupon_usage: { # name:cmp
-  path: '/v2/promotions/{pid}/coupons/{cid}/usage': op: { # ent:cmp:coupon_usage
-    'load': method: get # not-list
   }
 }
 
@@ -256,8 +204,8 @@ entity: school_event: { # name:cmp
 
 entity: seat: { # name:cmp
   path: '/v2/seats': op: { # ent:cmp:seat
-    'list': method: get # two-prop:data
     'create': method: post # not-load
+    'list': method: get # two-prop:data
   }
   path: '/v2/seats/{id}': op: { # ent:cmp:seat
     'load': method: get # not-list
@@ -268,12 +216,115 @@ entity: seat: { # name:cmp
   }
 }
 
+entity: space: { # name:path:spaces
+  path: '/v2/community/spaces/{id}': op: { # ent:path:spaces
+    'remove': method: delete # not-load
+  }
+}
+
 entity: subscription_plan: { # name:cmp
   path: '/v2/subscription-plans': op: { # ent:cmp:subscription_plan
     'list': method: get # two-prop:data;listent:subscription_plan
   }
   path: '/v2/subscription-plans/{id}': op: { # ent:cmp:subscription_plan
     'load': method: get # not-list
+  }
+}
+
+entity: unit_analytic: { # name:cmp
+  path: '/v2/courses/{course_id}/units/{uid}/analytics': op: { # ent:cmp:unit_analytic
+    'load': method: get # not-list
+  }
+}
+
+entity: user: { # name:cmp
+  path: '/v2/affiliates/{affiliate_id}/customers': op: { # ent:cmp:user
+    'list': method: get # two-prop:data;listent:user
+  }
+  path: '/v2/affiliates/{affiliate_id}/leads': op: { # ent:cmp:user
+    'list': method: get # two-prop:data;listent:user
+  }
+  path: '/v2/community/spaces/{space_id}/users': op: { # ent:path:users
+    'create': method: post # not-load
+    'list': method: get # two-prop:data
+  }
+  path: '/v2/community/spaces/{space_id}/users/{uid}': op: { # ent:path:users
+    'remove': method: delete # not-load
+  }
+  path: '/v2/courses/{course_id}/users': op: { # ent:cmp:user
+    'list': method: get # two-prop:data;listent:user
+  }
+  path: '/v2/seats/{seat_id}/users': op: { # ent:cmp:user
+    'list': method: get # array
+  }
+  path: '/v2/seats/{seat_id}/users/{uid}': op: { # ent:path:users
+    'create': method: post # not-load
+    'remove': method: delete # not-load
+  }
+  path: '/v2/user_groups/{user_group_id}/users': op: { # ent:cmp:user
+    'list': method: get # array
+  }
+  path: '/v2/user_groups/{user_group_id}/users/{uid}': op: { # ent:path:users
+    'create': method: post # not-load
+    'remove': method: delete # not-load
+  }
+  path: '/v2/users': op: { # ent:cmp:user
+    'create': method: post # not-load
+    'list': method: get # two-prop:data;listent:user
+  }
+  path: '/v2/users/by-product': op: { # ent:cmp:user
+    'list': method: get # two-prop:data;listent:user
+  }
+  path: '/v2/users/by-segment': op: { # ent:cmp:user
+    'list': method: get # two-prop:data;listent:user
+  }
+  path: '/v2/users/{id}': op: { # ent:cmp:user
+    'load': method: get # not-list
+    'update': method: put # not-load
+  }
+  path: '/v2/users/{user_id}/suspend': op: { # ent:cmp:user
+    'update': method: put # not-load
+  }
+  path: '/v2/users/{user_id}/tags': op: { # ent:cmp:user
+    'update': method: put # not-load
+  }
+  path: '/v2/users/{user_id}/unsuspend': op: { # ent:cmp:user
+    'update': method: put # not-load
+  }
+}
+
+entity: user_group: { # name:cmp
+  path: '/v2/user_groups': op: { # ent:cmp:user_group
+    'create': method: post # not-load
+    'list': method: get # two-prop:data
+  }
+  path: '/v2/user_groups/{id}': op: { # ent:cmp:user_group
+    'load': method: get # not-list
+    'update': method: put # not-load
+  }
+  path: '/v2/users/{user_id}/user-groups': op: { # ent:cmp:user_group
+    'list': method: get # array
+  }
+}
+
+entity: user_progress: { # name:cmp
+  path: '/v2/users/{user_id}/courses/{cid}/progress': op: { # ent:cmp:user_progress
+    'load': method: get # not-list
+  }
+  path: '/v2/users/{user_id}/progress': op: { # ent:cmp:user_progress
+    'list': method: get # two-prop:data
+  }
+}
+
+entity: user_response: { # name:cmp
+  path: '/v2/assessments/scores/{score_id}/review': op: { # ent:cmp:user_response
+    'create': method: post # not-load
+  }
+  path: '/v2/assessments/{assessment_id}/responses': op: { # ent:cmp:user_response
+    'list': method: get # two-prop:data;listent:user_response
+  }
+  path: '/v2/forms/{form_id}/responses': op: { # ent:cmp:user_response
+    'list': method: get # two-prop:data;listent:user_response
   }
 }
 
@@ -287,66 +338,15 @@ entity: user_role: { # name:path:user-roles
   }
 }
 
-entity: user_subscription: { # name:cmp
-  path: '/v2/user-subscriptions': op: { # ent:cmp:user_subscription
-    'list': method: get # two-prop:data;listent:user_subscription
-  }
-}
-
-entity: user_group: { # name:cmp
-  path: '/v2/user_groups': op: { # ent:cmp:user_group
-    'list': method: get # two-prop:data
-    'create': method: post # not-load
-  }
-  path: '/v2/user_groups/{id}': op: { # ent:cmp:user_group
-    'load': method: get # not-list
-    'update': method: put # not-load
-  }
-  path: '/v2/users/{user_id}/user-groups': op: { # ent:cmp:user_group
-    'list': method: get # array
-  }
-}
-
 entity: user_segment: { # name:cmp
   path: '/v2/users/segments': op: { # ent:cmp:user_segment
     'list': method: get # one-prop:data;listent:user_segment
   }
 }
 
-entity: enrollment: { # name:cmp
-  path: '/v2/users/{user_id}/courses': op: { # ent:cmp:enrollment
-    'list': method: get # two-prop:data;listent:enrollment
-  }
-  path: '/v2/users/{user_id}/enrollment': op: { # ent:path:enrollment
-    'create': method: post # not-load
-    'remove': method: delete # not-load
-  }
-}
-
-entity: complete: { # name:path:complete
-  path: '/v2/users/{user_id}/courses/{cid}/complete': op: { # ent:path:complete
-    'create': method: post # not-load
-  }
-}
-
-entity: user_progress: { # name:cmp
-  path: '/v2/users/{user_id}/courses/{cid}/progress': op: { # ent:cmp:user_progress
-    'load': method: get # not-list
-  }
-  path: '/v2/users/{user_id}/progress': op: { # ent:cmp:user_progress
-    'list': method: get # two-prop:data
-  }
-}
-
-entity: reset: { # name:path:reset
-  path: '/v2/users/{user_id}/courses/{cid}/reset': op: { # ent:path:reset
-    'create': method: post # not-load
-  }
-}
-
-entity: product: { # name:cmp
-  path: '/v2/users/{user_id}/products': op: { # ent:cmp:product
-    'list': method: get # one-prop:data;listent:product
+entity: user_subscription: { # name:cmp
+  path: '/v2/user-subscriptions': op: { # ent:cmp:user_subscription
+    'list': method: get # two-prop:data;listent:user_subscription
   }
 }
 

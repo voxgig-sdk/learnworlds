@@ -22,8 +22,8 @@ const utility_1 = require("../utility");
             const load_unit_analytic0 = (0, utility_1.makeStepData)(dm, 'load_unit_analytic0');
             load_unit_analytic0.entity = client.UnitAnalytic();
             load_unit_analytic0.match = (0, utility_1.makeMatch)(dm, transform, {
-                "id": "`dm$=p.LEARNWORLDS_TEST_UNIT_ANALYTIC_ENTID.unit_analytic01`",
-                "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`"
+                "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`",
+                "id": "`dm$=p.LEARNWORLDS_TEST_UNIT_ANALYTIC_ENTID.unit_analytic01`"
             });
             load_unit_analytic0.resdata =
                 await load_unit_analytic0.entity.load(load_unit_analytic0.match, ctrl = (0, utility_1.makeCtrl)(explain));
@@ -32,8 +32,8 @@ const utility_1 = require("../utility");
             }
             (0, utility_1.makeValid)(dm, validate, load_unit_analytic0.resdata, {
                 "`$OPEN`": true,
-                "id": "`dm$=s.load_unit_analytic0.match.id`",
-                "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`"
+                "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`",
+                "id": "`dm$=s.load_unit_analytic0.match.id`"
             });
         }
         catch (err) {
@@ -41,6 +41,7 @@ const utility_1 = require("../utility");
             if (explain) {
                 console.dir(ctrl.explain, { depth: null });
             }
+            console.log(err);
             throw err;
         }
     });
@@ -114,7 +115,7 @@ function basicSetup(extra) {
     }
     setup.client = client;
     setup.struct = client.utility().struct;
-    setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN;
+    setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN;
     return setup;
 }
 //# sourceMappingURL=UnitAnalyticEntity.test.js.map

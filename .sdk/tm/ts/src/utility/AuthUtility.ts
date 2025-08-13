@@ -1,5 +1,5 @@
 
-import { Context } from '../types'
+import { Context, Spec } from '../types'
 
 
 const HEADER_auth = 'authorization'
@@ -9,7 +9,7 @@ const OPTION_apikey = 'apikey'
 const NOTFOUND = ''
 
 
-function auth(ctx: Context) {
+function auth(ctx: Context): Spec | Error {
   const utility = ctx.utility
 
   const struct = utility.struct
@@ -19,6 +19,12 @@ function auth(ctx: Context) {
 
   const client = ctx.client
   const spec = ctx.spec
+
+  if (null == spec) {
+    return new Error('Expected context spec property to be defined.')
+  }
+
+
 
   const headers = spec.headers
 

@@ -45,6 +45,10 @@ function makeValid(
   valid: any
 ): Record<string, any> {
   valid["`$OPEN`"] = true
+
+  // console.log('MV', valid, data)
+  // console.dir(dm, { depth: null })
+
   return validate(data, valid, { meta: { '`$EXISTS`': true, dm } })
 }
 

@@ -7,7 +7,7 @@ function error(ctx, err) {
     ctx = ctx || {};
     const op = ctx.op || {};
     op.name = op.name || 'unknown operation';
-    const result = ctx.result = ctx.result || {};
+    const result = ctx.result || {};
     result.ok = false;
     const reserr = result.err;
     err = undefined === err ? reserr : err;
@@ -31,7 +31,7 @@ function error(ctx, err) {
     ctx.ctrl.err = err;
     // TODO: model option to return instead
     if (false === ctx.ctrl.throw) {
-        return ctx.result.resdata;
+        return result.resdata;
     }
     else {
         throw err;

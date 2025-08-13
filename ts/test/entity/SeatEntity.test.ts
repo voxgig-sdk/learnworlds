@@ -65,8 +65,8 @@ describe('SeatEntity', async () => {
       makeValid(dm, validate, update_seat1.resdata, {
         "`$OPEN`": true,
         "id": "`dm$=s.load_seat0.match.id`",
-        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`",
-        "title": "`dm$=s.update_seat1.reqdata.title`"
+        "title": "`dm$=s.update_seat1.reqdata.title`",
+        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`"
       })
 
       // Step: load_seat2 - load seat
@@ -82,14 +82,15 @@ describe('SeatEntity', async () => {
       makeValid(dm, validate, load_seat2.resdata, {
         "`$OPEN`": true,
         "id": "`dm$=s.load_seat0.match.id`",
-        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`",
-        "title": "`dm$=s.update_seat1.reqdata.title`"
+        "title": "`dm$=s.update_seat1.reqdata.title`",
+        "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`"
       })
  
     }
     catch(err: any) {
       console.dir(dm, {depth: null})
       if( explain ) { console.dir(ctrl.explain, {depth: null}) }
+      console.log(err)
       throw err
     }
 
@@ -193,7 +194,7 @@ function basicSetup(extra?: any) {
   
   setup.client = client    
   setup.struct = client.utility().struct
-  setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN
+  setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN
 
   return setup
 }

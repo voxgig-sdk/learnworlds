@@ -1,5 +1,5 @@
 "use strict";
-// VERSION: @voxgig/struct 0.0.4
+// VERSION: @voxgig/struct 0.0.9
 // RUN: npm test
 // RUN-SOME: npm run test-some --pattern=getpath
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -9,112 +9,121 @@ const runner_1 = require("../runner");
 const index_1 = require("./index");
 // NOTE: tests are (mostly) in order of increasing dependence.
 (0, node_test_1.describe)('struct', async () => {
-    const runner = await (0, runner_1.makeRunner)(index_1.TEST_JSON_FILE, await index_1.SDK.test());
-    const { spec, runset, runsetflags, client } = await runner('struct');
-    const { clone, delprop, escre, escurl, getelem, getpath, getprop, haskey, inject, isempty, isfunc, iskey, islist, ismap, isnode, items, joinurl, jsonify, keysof, merge, pad, pathify, select, size, slice, setprop, strkey, stringify, transform, typify, validate, walk, jo, ja, } = client.utility().struct;
-    const minorSpec = spec.minor;
-    const walkSpec = spec.walk;
-    const mergeSpec = spec.merge;
-    const getpathSpec = spec.getpath;
-    const injectSpec = spec.inject;
-    const transformSpec = spec.transform;
-    const validateSpec = spec.validate;
-    const selectSpec = spec.select;
+    let spec;
+    let runset;
+    let runsetflags;
+    let client;
+    let struct;
+    (0, node_test_1.before)(async () => {
+        const runner = await (0, runner_1.makeRunner)(index_1.TEST_JSON_FILE, await index_1.SDK.test());
+        const runner_struct = await runner('struct');
+        spec = runner_struct.spec;
+        runset = runner_struct.runset;
+        runsetflags = runner_struct.runsetflags;
+        client = runner_struct.client;
+        struct = client.utility().struct;
+    });
     (0, node_test_1.test)('exists', () => {
-        (0, node_assert_1.equal)('function', typeof clone);
-        (0, node_assert_1.equal)('function', typeof delprop);
-        (0, node_assert_1.equal)('function', typeof escre);
-        (0, node_assert_1.equal)('function', typeof escurl);
-        (0, node_assert_1.equal)('function', typeof getelem);
-        (0, node_assert_1.equal)('function', typeof getprop);
-        (0, node_assert_1.equal)('function', typeof getpath);
-        (0, node_assert_1.equal)('function', typeof haskey);
-        (0, node_assert_1.equal)('function', typeof inject);
-        (0, node_assert_1.equal)('function', typeof isempty);
-        (0, node_assert_1.equal)('function', typeof isfunc);
-        (0, node_assert_1.equal)('function', typeof iskey);
-        (0, node_assert_1.equal)('function', typeof islist);
-        (0, node_assert_1.equal)('function', typeof ismap);
-        (0, node_assert_1.equal)('function', typeof isnode);
-        (0, node_assert_1.equal)('function', typeof items);
-        (0, node_assert_1.equal)('function', typeof joinurl);
-        (0, node_assert_1.equal)('function', typeof jsonify);
-        (0, node_assert_1.equal)('function', typeof keysof);
-        (0, node_assert_1.equal)('function', typeof merge);
-        (0, node_assert_1.equal)('function', typeof pad);
-        (0, node_assert_1.equal)('function', typeof pathify);
-        (0, node_assert_1.equal)('function', typeof select);
-        (0, node_assert_1.equal)('function', typeof size);
-        (0, node_assert_1.equal)('function', typeof slice);
-        (0, node_assert_1.equal)('function', typeof setprop);
-        (0, node_assert_1.equal)('function', typeof strkey);
-        (0, node_assert_1.equal)('function', typeof stringify);
-        (0, node_assert_1.equal)('function', typeof transform);
-        (0, node_assert_1.equal)('function', typeof typify);
-        (0, node_assert_1.equal)('function', typeof validate);
-        (0, node_assert_1.equal)('function', typeof walk);
+        const s = struct;
+        (0, node_assert_1.equal)('function', typeof s.clone);
+        (0, node_assert_1.equal)('function', typeof s.delprop);
+        (0, node_assert_1.equal)('function', typeof s.escre);
+        (0, node_assert_1.equal)('function', typeof s.escurl);
+        (0, node_assert_1.equal)('function', typeof s.getelem);
+        (0, node_assert_1.equal)('function', typeof s.getprop);
+        (0, node_assert_1.equal)('function', typeof s.getpath);
+        (0, node_assert_1.equal)('function', typeof s.haskey);
+        (0, node_assert_1.equal)('function', typeof s.inject);
+        (0, node_assert_1.equal)('function', typeof s.isempty);
+        (0, node_assert_1.equal)('function', typeof s.isfunc);
+        (0, node_assert_1.equal)('function', typeof s.iskey);
+        (0, node_assert_1.equal)('function', typeof s.islist);
+        (0, node_assert_1.equal)('function', typeof s.ismap);
+        (0, node_assert_1.equal)('function', typeof s.isnode);
+        (0, node_assert_1.equal)('function', typeof s.items);
+        (0, node_assert_1.equal)('function', typeof s.joinurl);
+        (0, node_assert_1.equal)('function', typeof s.jsonify);
+        (0, node_assert_1.equal)('function', typeof s.keysof);
+        (0, node_assert_1.equal)('function', typeof s.merge);
+        (0, node_assert_1.equal)('function', typeof s.pad);
+        (0, node_assert_1.equal)('function', typeof s.pathify);
+        (0, node_assert_1.equal)('function', typeof s.select);
+        (0, node_assert_1.equal)('function', typeof s.size);
+        (0, node_assert_1.equal)('function', typeof s.slice);
+        (0, node_assert_1.equal)('function', typeof s.setprop);
+        (0, node_assert_1.equal)('function', typeof s.strkey);
+        (0, node_assert_1.equal)('function', typeof s.stringify);
+        (0, node_assert_1.equal)('function', typeof s.transform);
+        (0, node_assert_1.equal)('function', typeof s.typify);
+        (0, node_assert_1.equal)('function', typeof s.validate);
+        (0, node_assert_1.equal)('function', typeof s.walk);
     });
     // minor tests
     // ===========
     (0, node_test_1.test)('minor-isnode', async () => {
-        await runset(minorSpec.isnode, isnode);
+        await runset(spec.minor.isnode, struct.isnode);
     });
     (0, node_test_1.test)('minor-ismap', async () => {
-        await runset(minorSpec.ismap, ismap);
+        await runset(spec.minor.ismap, struct.ismap);
     });
     (0, node_test_1.test)('minor-islist', async () => {
-        await runset(minorSpec.islist, islist);
+        await runset(spec.minor.islist, struct.islist);
     });
     (0, node_test_1.test)('minor-iskey', async () => {
-        await runsetflags(minorSpec.iskey, { null: false }, iskey);
+        await runsetflags(spec.minor.iskey, { null: false }, struct.iskey);
     });
     (0, node_test_1.test)('minor-strkey', async () => {
-        await runsetflags(minorSpec.strkey, { null: false }, strkey);
+        await runsetflags(spec.minor.strkey, { null: false }, struct.strkey);
     });
     (0, node_test_1.test)('minor-isempty', async () => {
-        await runsetflags(minorSpec.isempty, { null: false }, isempty);
+        await runsetflags(spec.minor.isempty, { null: false }, struct.isempty);
     });
     (0, node_test_1.test)('minor-isfunc', async () => {
-        await runset(minorSpec.isfunc, isfunc);
+        const { isfunc } = struct;
+        await runset(spec.minor.isfunc, isfunc);
         function f0() { return null; }
         (0, node_assert_1.equal)(isfunc(f0), true);
         (0, node_assert_1.equal)(isfunc(() => null), true);
     });
     (0, node_test_1.test)('minor-clone', async () => {
-        await runsetflags(minorSpec.clone, { null: false }, clone);
+        const { clone } = struct;
+        await runsetflags(spec.minor.clone, { null: false }, clone);
         const f0 = () => null;
         (0, node_assert_1.deepEqual)({ a: f0 }, clone({ a: f0 }));
     });
     (0, node_test_1.test)('minor-escre', async () => {
-        await runset(minorSpec.escre, escre);
+        await runset(spec.minor.escre, struct.escre);
     });
     (0, node_test_1.test)('minor-escurl', async () => {
-        await runset(minorSpec.escurl, escurl);
+        await runset(spec.minor.escurl, struct.escurl);
     });
     (0, node_test_1.test)('minor-stringify', async () => {
-        await runset(minorSpec.stringify, (vin) => stringify((runner_1.NULLMARK === vin.val ? "null" : vin.val), vin.max));
+        await runset(spec.minor.stringify, (vin) => struct.stringify((runner_1.NULLMARK === vin.val ? "null" : vin.val), vin.max));
     });
     (0, node_test_1.test)('minor-jsonify', async () => {
-        await runsetflags(minorSpec.jsonify, { null: false }, jsonify);
+        await runsetflags(spec.minor.jsonify, { null: false }, struct.jsonify);
     });
     (0, node_test_1.test)('minor-pathify', async () => {
-        await runsetflags(minorSpec.pathify, { null: true }, (vin) => {
+        await runsetflags(spec.minor.pathify, { null: true }, (vin) => {
             let path = runner_1.NULLMARK == vin.path ? undefined : vin.path;
-            let pathstr = pathify(path, vin.from).replace('__NULL__.', '');
+            let pathstr = struct.pathify(path, vin.from).replace('__NULL__.', '');
             pathstr = runner_1.NULLMARK === vin.path ? pathstr.replace('>', ':null>') : pathstr;
             return pathstr;
         });
     });
     (0, node_test_1.test)('minor-items', async () => {
-        await runset(minorSpec.items, items);
+        await runset(spec.minor.items, struct.items);
     });
     (0, node_test_1.test)('minor-getelem', async () => {
-        await runsetflags(minorSpec.getelem, { null: false }, (vin) => null == vin.alt ? getelem(vin.val, vin.key) : getelem(vin.val, vin.key, vin.alt));
+        const { getelem } = struct;
+        await runsetflags(spec.minor.getelem, { null: false }, (vin) => null == vin.alt ? getelem(vin.val, vin.key) : getelem(vin.val, vin.key, vin.alt));
     });
     (0, node_test_1.test)('minor-getprop', async () => {
-        await runsetflags(minorSpec.getprop, { null: false }, (vin) => null == vin.alt ? getprop(vin.val, vin.key) : getprop(vin.val, vin.key, vin.alt));
+        const { getprop } = struct;
+        await runsetflags(spec.minor.getprop, { null: false }, (vin) => undefined === vin.alt ? getprop(vin.val, vin.key) : getprop(vin.val, vin.key, vin.alt));
     });
     (0, node_test_1.test)('minor-edge-getprop', async () => {
+        const { getprop } = struct;
         let strarr = ['a', 'b', 'c', 'd', 'e'];
         (0, node_assert_1.deepEqual)(getprop(strarr, 2), 'c');
         (0, node_assert_1.deepEqual)(getprop(strarr, '2'), 'c');
@@ -123,9 +132,10 @@ const index_1 = require("./index");
         (0, node_assert_1.deepEqual)(getprop(intarr, '2'), 5);
     });
     (0, node_test_1.test)('minor-setprop', async () => {
-        await runset(minorSpec.setprop, (vin) => setprop(vin.parent, vin.key, vin.val));
+        await runset(spec.minor.setprop, (vin) => struct.setprop(vin.parent, vin.key, vin.val));
     });
     (0, node_test_1.test)('minor-edge-setprop', async () => {
+        const { setprop } = struct;
         let strarr0 = ['a', 'b', 'c', 'd', 'e'];
         let strarr1 = ['a', 'b', 'c', 'd', 'e'];
         (0, node_assert_1.deepEqual)(setprop(strarr0, 2, 'C'), ['a', 'b', 'C', 'd', 'e']);
@@ -136,9 +146,10 @@ const index_1 = require("./index");
         (0, node_assert_1.deepEqual)(setprop(intarr1, '2', 555), [2, 3, 555, 7, 11]);
     });
     (0, node_test_1.test)('minor-delprop', async () => {
-        await runset(minorSpec.delprop, (vin) => delprop(vin.parent, vin.key));
+        await runset(spec.minor.delprop, (vin) => struct.delprop(vin.parent, vin.key));
     });
     (0, node_test_1.test)('minor-edge-delprop', async () => {
+        const { delprop } = struct;
         let strarr0 = ['a', 'b', 'c', 'd', 'e'];
         let strarr1 = ['a', 'b', 'c', 'd', 'e'];
         (0, node_assert_1.deepEqual)(delprop(strarr0, 2), ['a', 'b', 'd', 'e']);
@@ -149,31 +160,32 @@ const index_1 = require("./index");
         (0, node_assert_1.deepEqual)(delprop(intarr1, '2'), [2, 3, 7, 11]);
     });
     (0, node_test_1.test)('minor-haskey', async () => {
-        await runsetflags(minorSpec.haskey, { null: false }, (vin) => haskey(vin.src, vin.key));
+        await runsetflags(spec.minor.haskey, { null: false }, (vin) => struct.haskey(vin.src, vin.key));
     });
     (0, node_test_1.test)('minor-keysof', async () => {
-        await runset(minorSpec.keysof, keysof);
+        await runset(spec.minor.keysof, struct.keysof);
     });
     (0, node_test_1.test)('minor-joinurl', async () => {
-        await runsetflags(minorSpec.joinurl, { null: false }, joinurl);
+        await runsetflags(spec.minor.joinurl, { null: false }, struct.joinurl);
     });
     (0, node_test_1.test)('minor-typify', async () => {
-        await runsetflags(minorSpec.typify, { null: false }, typify);
+        await runsetflags(spec.minor.typify, { null: false }, struct.typify);
     });
     (0, node_test_1.test)('minor-size', async () => {
-        await runsetflags(minorSpec.size, { null: false }, size);
+        await runsetflags(spec.minor.size, { null: false }, struct.size);
     });
     (0, node_test_1.test)('minor-slice', async () => {
-        await runsetflags(minorSpec.slice, { null: false }, (vin) => slice(vin.val, vin.start, vin.end));
+        await runsetflags(spec.minor.slice, { null: false }, (vin) => struct.slice(vin.val, vin.start, vin.end));
     });
     (0, node_test_1.test)('minor-pad', async () => {
-        await runsetflags(minorSpec.pad, { null: false }, (vin) => pad(vin.val, vin.pad, vin.char));
+        await runsetflags(spec.minor.pad, { null: false }, (vin) => struct.pad(vin.val, vin.pad, vin.char));
     });
     // walk tests
     // ==========
     (0, node_test_1.test)('walk-log', async () => {
-        const test = clone(walkSpec.log);
-        const log = [];
+        const { clone, stringify, pathify, walk } = struct;
+        const test = clone(spec.walk.log);
+        let log = [];
         function walklog(key, val, parent, path) {
             log.push('k=' + stringify(key) +
                 ', v=' + stringify(val) +
@@ -181,31 +193,62 @@ const index_1 = require("./index");
                 ', t=' + pathify(path));
             return val;
         }
+        walk(test.in, undefined, walklog);
+        (0, node_assert_1.deepEqual)(log, test.out.after);
+        log = [];
         walk(test.in, walklog);
-        (0, node_assert_1.deepEqual)(log, test.out);
+        (0, node_assert_1.deepEqual)(log, test.out.before);
+        log = [];
+        walk(test.in, walklog, walklog);
+        (0, node_assert_1.deepEqual)(log, test.out.both);
     });
     (0, node_test_1.test)('walk-basic', async () => {
         function walkpath(_key, val, _parent, path) {
             return 'string' === typeof val ? val + '~' + path.join('.') : val;
         }
-        await runset(walkSpec.basic, (vin) => walk(vin, walkpath));
+        await runset(spec.walk.basic, (vin) => struct.walk(vin, walkpath));
+    });
+    (0, node_test_1.test)('walk-depth', async () => {
+        await runsetflags(spec.walk.depth, { null: false }, (vin) => {
+            let top = undefined;
+            let cur = undefined;
+            function copy(key, val, _parent, _path) {
+                if (undefined === key || struct.isnode(val)) {
+                    let child = struct.islist(val) ? [] : {};
+                    if (undefined === key) {
+                        top = cur = child;
+                    }
+                    else {
+                        cur = cur[key] = child;
+                    }
+                }
+                else {
+                    cur[key] = val;
+                }
+                return val;
+            }
+            struct.walk(vin.src, copy, undefined, vin.maxdepth);
+            return top;
+        });
     });
     // merge tests
     // ===========
     (0, node_test_1.test)('merge-basic', async () => {
-        const test = clone(mergeSpec.basic);
+        const { clone, merge } = struct;
+        const test = clone(spec.merge.basic);
         (0, node_assert_1.deepEqual)(merge(test.in), test.out);
     });
     (0, node_test_1.test)('merge-cases', async () => {
-        await runset(mergeSpec.cases, merge);
+        await runset(spec.merge.cases, struct.merge);
     });
     (0, node_test_1.test)('merge-array', async () => {
-        await runset(mergeSpec.array, merge);
+        await runset(spec.merge.array, struct.merge);
     });
     (0, node_test_1.test)('merge-integrity', async () => {
-        await runset(mergeSpec.integrity, merge);
+        await runset(spec.merge.integrity, struct.merge);
     });
     (0, node_test_1.test)('merge-special', async () => {
+        const { merge } = struct;
         const f0 = () => null;
         (0, node_assert_1.deepEqual)(merge([f0]), f0);
         (0, node_assert_1.deepEqual)(merge([null, f0]), f0);
@@ -216,20 +259,44 @@ const index_1 = require("./index");
         (0, node_assert_1.deepEqual)(merge([{ a: global.fetch }]), { a: global.fetch });
         (0, node_assert_1.deepEqual)(merge([[global.fetch]]), [global.fetch]);
         (0, node_assert_1.deepEqual)(merge([{ a: { b: global.fetch } }]), { a: { b: global.fetch } });
+        class Bar {
+            x = 1;
+        }
+        const b0 = new Bar();
+        let out;
+        (0, node_assert_1.equal)(merge([{ x: 10 }, b0]), b0);
+        (0, node_assert_1.equal)(b0.x, 1);
+        (0, node_assert_1.equal)(b0 instanceof Bar, true);
+        (0, node_assert_1.deepEqual)(merge([{ a: b0 }, { a: { x: 11 } }]), { a: { x: 11 } });
+        (0, node_assert_1.equal)(b0.x, 1);
+        (0, node_assert_1.equal)(b0 instanceof Bar, true);
+        (0, node_assert_1.deepEqual)(merge([b0, { x: 20 }]), { x: 20 });
+        (0, node_assert_1.equal)(b0.x, 1);
+        (0, node_assert_1.equal)(b0 instanceof Bar, true);
+        out = merge([{ a: { x: 21 } }, { a: b0 }]);
+        (0, node_assert_1.deepEqual)(out, { a: b0 });
+        (0, node_assert_1.equal)(b0, out.a);
+        (0, node_assert_1.equal)(b0.x, 1);
+        (0, node_assert_1.equal)(b0 instanceof Bar, true);
+        out = merge([{}, { b: b0 }]);
+        (0, node_assert_1.deepEqual)(out, { b: b0 });
+        (0, node_assert_1.equal)(b0, out.b);
+        (0, node_assert_1.equal)(b0.x, 1);
+        (0, node_assert_1.equal)(b0 instanceof Bar, true);
     });
     // getpath tests
     // =============
     (0, node_test_1.test)('getpath-basic', async () => {
-        await runset(getpathSpec.basic, (vin) => getpath(vin.store, vin.path));
+        await runset(spec.getpath.basic, (vin) => struct.getpath(vin.store, vin.path));
     });
     (0, node_test_1.test)('getpath-relative', async () => {
-        await runset(getpathSpec.relative, (vin) => getpath(vin.store, vin.path, { dparent: vin.dparent, dpath: vin.dpath?.split('.') }));
+        await runset(spec.getpath.relative, (vin) => struct.getpath(vin.store, vin.path, { dparent: vin.dparent, dpath: vin.dpath?.split('.') }));
     });
     (0, node_test_1.test)('getpath-special', async () => {
-        await runset(getpathSpec.special, (vin) => getpath(vin.store, vin.path, vin.inj));
+        await runset(spec.getpath.special, (vin) => struct.getpath(vin.store, vin.path, vin.inj));
     });
     (0, node_test_1.test)('getpath-handler', async () => {
-        await runset(getpathSpec.handler, (vin) => getpath({
+        await runset(spec.getpath.handler, (vin) => struct.getpath({
             $TOP: vin.store,
             $FOO: () => 'foo',
         }, vin.path, {
@@ -241,38 +308,40 @@ const index_1 = require("./index");
     // inject tests
     // ============
     (0, node_test_1.test)('inject-basic', async () => {
-        const test = clone(injectSpec.basic);
+        const { clone, inject } = struct;
+        const test = clone(spec.inject.basic);
         (0, node_assert_1.deepEqual)(inject(test.in.val, test.in.store), test.out);
     });
     (0, node_test_1.test)('inject-string', async () => {
-        await runset(injectSpec.string, (vin) => inject(vin.val, vin.store, { modify: runner_1.nullModifier }));
+        await runset(spec.inject.string, (vin) => struct.inject(vin.val, vin.store, { modify: runner_1.nullModifier }));
     });
     (0, node_test_1.test)('inject-deep', async () => {
-        await runset(injectSpec.deep, (vin) => inject(vin.val, vin.store));
+        await runset(spec.inject.deep, (vin) => struct.inject(vin.val, vin.store));
     });
     // transform tests
     // ===============
     (0, node_test_1.test)('transform-basic', async () => {
-        const test = clone(transformSpec.basic);
+        const { clone, transform } = struct;
+        const test = clone(spec.transform.basic);
         (0, node_assert_1.deepEqual)(transform(test.in.data, test.in.spec), test.out);
     });
     (0, node_test_1.test)('transform-paths', async () => {
-        await runset(transformSpec.paths, (vin) => transform(vin.data, vin.spec));
+        await runset(spec.transform.paths, (vin) => struct.transform(vin.data, vin.spec));
     });
     (0, node_test_1.test)('transform-cmds', async () => {
-        await runset(transformSpec.cmds, (vin) => transform(vin.data, vin.spec));
+        await runset(spec.transform.cmds, (vin) => struct.transform(vin.data, vin.spec));
     });
     (0, node_test_1.test)('transform-each', async () => {
-        await runset(transformSpec.each, (vin) => transform(vin.data, vin.spec));
+        await runset(spec.transform.each, (vin) => struct.transform(vin.data, vin.spec));
     });
     (0, node_test_1.test)('transform-pack', async () => {
-        await runset(transformSpec.pack, (vin) => transform(vin.data, vin.spec));
+        await runset(spec.transform.pack, (vin) => struct.transform(vin.data, vin.spec));
     });
     (0, node_test_1.test)('transform-ref', async () => {
-        await runset(transformSpec.ref, (vin) => transform(vin.data, vin.spec));
+        await runset(spec.transform.ref, (vin) => struct.transform(vin.data, vin.spec));
     });
     (0, node_test_1.test)('transform-modify', async () => {
-        await runset(transformSpec.modify, (vin) => transform(vin.data, vin.spec, {
+        await runset(spec.transform.modify, (vin) => struct.transform(vin.data, vin.spec, {
             modify: (val, key, parent) => {
                 if (null != key && null != parent && 'string' === typeof val) {
                     val = parent[key] = '@' + val;
@@ -281,11 +350,11 @@ const index_1 = require("./index");
         }));
     });
     (0, node_test_1.test)('transform-extra', async () => {
-        (0, node_assert_1.deepEqual)(transform({ a: 1 }, { x: '`a`', b: '`$COPY`', c: '`$UPPER`' }, {
+        (0, node_assert_1.deepEqual)(struct.transform({ a: 1 }, { x: '`a`', b: '`$COPY`', c: '`$UPPER`' }, {
             extra: {
                 b: 2, $UPPER: (state) => {
                     const { path } = state;
-                    return ('' + getprop(path, path.length - 1)).toUpperCase();
+                    return ('' + struct.getprop(path, path.length - 1)).toUpperCase();
                 }
             }
         }), {
@@ -295,6 +364,7 @@ const index_1 = require("./index");
         });
     });
     (0, node_test_1.test)('transform-funcval', async () => {
+        const { transform } = struct;
         // f0 should never be called (no $ prefix).
         const f0 = () => 99;
         (0, node_assert_1.deepEqual)(transform({}, { x: 1 }), { x: 1 });
@@ -305,22 +375,22 @@ const index_1 = require("./index");
     // validate tests
     // ===============
     (0, node_test_1.test)('validate-basic', async () => {
-        await runset(validateSpec.basic, (vin) => validate(vin.data, vin.spec));
+        await runset(spec.validate.basic, (vin) => struct.validate(vin.data, vin.spec));
     });
     (0, node_test_1.test)('validate-child', async () => {
-        await runset(validateSpec.child, (vin) => validate(vin.data, vin.spec));
+        await runset(spec.validate.child, (vin) => struct.validate(vin.data, vin.spec));
     });
     (0, node_test_1.test)('validate-one', async () => {
-        await runset(validateSpec.one, (vin) => validate(vin.data, vin.spec));
+        await runset(spec.validate.one, (vin) => struct.validate(vin.data, vin.spec));
     });
     (0, node_test_1.test)('validate-exact', async () => {
-        await runset(validateSpec.exact, (vin) => validate(vin.data, vin.spec));
+        await runset(spec.validate.exact, (vin) => struct.validate(vin.data, vin.spec));
     });
     (0, node_test_1.test)('validate-invalid', async () => {
-        await runsetflags(validateSpec.invalid, { null: false }, (vin) => validate(vin.data, vin.spec));
+        await runsetflags(spec.validate.invalid, { null: false }, (vin) => struct.validate(vin.data, vin.spec));
     });
     (0, node_test_1.test)('validate-special', async () => {
-        await runset(validateSpec.special, (vin) => validate(vin.data, vin.spec, vin.inj));
+        await runset(spec.validate.special, (vin) => struct.validate(vin.data, vin.spec, vin.inj));
     });
     (0, node_test_1.test)('validate-custom', async () => {
         const errs = [];
@@ -328,7 +398,7 @@ const index_1 = require("./index");
             $INTEGER: (inj) => {
                 const { key } = inj;
                 // let out = getprop(current, key)
-                let out = getprop(inj.dparent, key);
+                let out = struct.getprop(inj.dparent, key);
                 let t = typeof out;
                 if ('number' !== t && !Number.isInteger(out)) {
                     inj.errs.push('Not an integer at ' + inj.path.slice(1).join('.') + ': ' + out);
@@ -338,27 +408,28 @@ const index_1 = require("./index");
             },
         };
         const shape = { a: '`$INTEGER`' };
-        let out = validate({ a: 1 }, shape, { extra, errs });
+        let out = struct.validate({ a: 1 }, shape, { extra, errs });
         (0, node_assert_1.deepEqual)(out, { a: 1 });
         (0, node_assert_1.equal)(errs.length, 0);
-        out = validate({ a: 'A' }, shape, { extra, errs });
+        out = struct.validate({ a: 'A' }, shape, { extra, errs });
         (0, node_assert_1.deepEqual)(out, { a: 'A' });
         (0, node_assert_1.deepEqual)(errs, ['Not an integer at a: A']);
     });
     // select tests
     // ============
     (0, node_test_1.test)('select-basic', async () => {
-        await runset(selectSpec.basic, (vin) => select(vin.obj, vin.query));
+        await runset(spec.select.basic, (vin) => struct.select(vin.obj, vin.query));
     });
     (0, node_test_1.test)('select-operators', async () => {
-        await runset(selectSpec.operators, (vin) => select(vin.obj, vin.query));
+        await runset(spec.select.operators, (vin) => struct.select(vin.obj, vin.query));
     });
     (0, node_test_1.test)('select-edge', async () => {
-        await runset(selectSpec.edge, (vin) => select(vin.obj, vin.query));
+        await runset(spec.select.edge, (vin) => struct.select(vin.obj, vin.query));
     });
     // JSON Builder
     // ============
     (0, node_test_1.test)('json-builder', async () => {
+        const { jsonify, jo, ja } = struct;
         (0, node_assert_1.equal)(jsonify(jo('a', 1)), `{
   "a": 1
 }`);

@@ -1,8 +1,13 @@
 
-import { Context } from '../types'
+import { Context, Response } from '../types'
 
 
-async function request(ctx: Context) {
+async function request(ctx: Context): Promise<Response | Error> {
+  // PreRequest feature hook has already provided a result.
+  if (ctx.out.request) {
+    return ctx.out.request
+  }
+
   const { spec, utility } = ctx
   const { fullurl, fetcher } = utility
 
@@ -19,11 +24,20 @@ async function request(ctx: Context) {
 
   ctx.result = result
 
+  if (null == spec) {
+    return new Error('Expected context spec property to be defined.')
+  }
+
 
   try {
     spec.step = 'prepare'
 
-    const url = spec.url = fullurl(ctx)
+    const url = fullurl(ctx)
+    if (url instanceof Error) {
+      throw url
+    }
+
+    spec.url = url
 
     const fetchdef: any = {
       method: spec.method,
@@ -46,6 +60,9 @@ async function request(ctx: Context) {
 
     if (null == response) {
       response = { err: new Error('response: undefined') }
+    }
+    else if (response instanceof Error) {
+      response = { err: response }
     }
   }
   catch (err) {

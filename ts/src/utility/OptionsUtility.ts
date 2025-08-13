@@ -3,15 +3,15 @@ import { Context } from '../types'
 
 
 function options(ctx: Context) {
-  const { options, utility } = ctx
+  const utility = ctx.utility
+  const options = ctx.options
   const struct = utility.struct
-  const setprop = struct.setprop
 
   let opts = { ...(options || {}) }
 
   const customUtils = opts.utility || {}
   for (let key of Object.keys(customUtils)) {
-    setprop(utility, key, customUtils[key])
+    struct.setprop(utility, key, customUtils[key])
   }
 
   const { merge, validate } = utility.struct
@@ -30,6 +30,10 @@ function options(ctx: Context) {
     },
     headers: {
       '`$CHILD`': '`$STRING`'
+    },
+    allow: {
+      method: 'GET,PUT,POST,PATCH,DELETE,OPTIONS',
+      op: 'create,update,load,list,remove,command,direct'
     },
     entity: {
       '`$CHILD`': {
@@ -53,6 +57,9 @@ function options(ctx: Context) {
       entity: {
         '`$OPEN`': true,
       }
+    },
+    clean: {
+      keys: 'key,token,id'
     }
   }
 
@@ -62,6 +69,21 @@ function options(ctx: Context) {
   opts = merge([{}, cfgopts, opts])
 
   opts = validate(opts, optspec)
+
+  opts.__derived__ = {
+    clean: {
+      keyre: undefined
+    }
+  }
+
+  const keyre = opts.clean.keys
+    .split(/\s*,\s*/)
+    .filter((s: string) => null != s && '' !== s)
+    .map((key: string) => struct.escre(key)).join('|')
+
+  if ('' != keyre) {
+    opts.__derived__.clean.keyre = keyre
+  }
 
   return opts
 }

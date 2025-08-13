@@ -12,6 +12,9 @@ function auth(ctx) {
     const delprop = struct.delprop;
     const client = ctx.client;
     const spec = ctx.spec;
+    if (null == spec) {
+        return new Error('Expected context spec property to be defined.');
+    }
     const headers = spec.headers;
     const options = client.options();
     const apikey = getprop(options, OPTION_apikey, NOTFOUND);

@@ -11,7 +11,16 @@ class EntityOperation {
     let client = this.#client
     const utility = this.#utility
     const {
-      operator, spec, request, response, result, done, contextify, opify, featurehook
+      contextify,
+      done,
+      error,
+      featurehook,
+      operator,
+      opify,
+      request,
+      response,
+      result,
+      spec,
     } = utility
 
     let fres: Promise<any> | undefined = undefined
@@ -30,48 +39,66 @@ class EntityOperation {
     })
 
     let ctx: Context = contextify({
+      current: new WeakMap(),
       ctrl,
       op,
       match: this.#match,
       data: this.#data,
       reqmatch
-    }, this.#_basectx)
+    }, this._entctx)
 
     try {
 
       // #PreOperation-Hook    
 
-      operator(ctx)
+      ctx.out.operator = operator(ctx)
+      if (ctx.out.operator instanceof Error) {
+        return error(ctx, ctx.out.operator)
+      }
 
 
       // #PreSpec-Hook
 
-      spec(ctx)
+      ctx.out.spec = spec(ctx)
+      if (ctx.out.spec instanceof Error) {
+        return error(ctx, ctx.out.spec)
+      }
 
 
       // #PreRequest-Hook
 
-      await request(ctx)
+      ctx.out.request = await request(ctx)
+      if (ctx.out.request instanceof Error) {
+        return error(ctx, ctx.out.request)
+      }
 
 
       // #PreResponse-Hook
 
-      await response(ctx)
+      ctx.out.response = await response(ctx)
+      if (ctx.out.response instanceof Error) {
+        return error(ctx, ctx.out.response)
+      }
 
 
       // #PreResult-Hook
 
-      result(ctx)
+      ctx.out.result = await result(ctx)
+      if (ctx.out.result instanceof Error) {
+        return error(ctx, ctx.out.result)
+      }
 
 
       // #PostOperation-Hook
 
-      if (null != ctx.result.resmatch) {
-        this.#match = ctx.result.resmatch
-      }
+      if (null != ctx.result) {
+        if (null != ctx.result.resmatch) {
+          this.#match = ctx.result.resmatch
+        }
 
-      if (null != ctx.result.resdata) {
-        this.#data = ctx.result.resdata
+        if (null != ctx.result.resdata) {
+          this.#data = ctx.result.resdata
+        }
       }
 
       return done(ctx)

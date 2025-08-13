@@ -62,8 +62,8 @@ describe('UserEntity', async () => {
       if( explain ) { console.log('update_user1: ', ctrl.explain) }
       makeValid(dm, validate, update_user1.resdata, {
         "`$OPEN`": true,
-        "id": "`dm$=s.load_user0.match.id`",
-        "email": "`dm$=s.update_user1.reqdata.email`"
+        "email": "`dm$=s.update_user1.reqdata.email`",
+        "id": "`dm$=s.load_user0.match.id`"
       })
 
       // Step: load_user2 - load user
@@ -77,14 +77,15 @@ describe('UserEntity', async () => {
       if( explain ) { console.log('load_user2: ', ctrl.explain) }
       makeValid(dm, validate, load_user2.resdata, {
         "`$OPEN`": true,
-        "id": "`dm$=s.load_user0.match.id`",
-        "email": "`dm$=s.update_user1.reqdata.email`"
+        "email": "`dm$=s.update_user1.reqdata.email`",
+        "id": "`dm$=s.load_user0.match.id`"
       })
  
     }
     catch(err: any) {
       console.dir(dm, {depth: null})
       if( explain ) { console.dir(ctrl.explain, {depth: null}) }
+      console.log(err)
       throw err
     }
 
@@ -202,7 +203,7 @@ function basicSetup(extra?: any) {
   
   setup.client = client    
   setup.struct = client.utility().struct
-  setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN
+  setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN
 
   return setup
 }

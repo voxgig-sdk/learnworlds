@@ -8,7 +8,7 @@ class EventLogEntity {
     #utility;
     #data;
     #match;
-    #_basectx;
+    _entctx;
     constructor(client, entopts) {
         // super()
         entopts = entopts || {};
@@ -19,15 +19,12 @@ class EventLogEntity {
         this.#data = {};
         this.#match = {};
         const contextify = this.#utility.contextify;
-        this.#_basectx = contextify({
+        this._entctx = contextify({
             entity: this,
-            client,
-            utility: this.#utility,
             entopts,
-            options: client.options()
-        });
+        }, client._rootctx);
         const featurehook = this.#utility.featurehook;
-        featurehook(this.#_basectx, 'PostConstructEntity');
+        featurehook(this._entctx, 'PostConstructEntity');
     }
     entopts() {
         return { ...this.#entopts };
@@ -40,25 +37,26 @@ class EventLogEntity {
     }
     data(data) {
         const featurehook = this.#utility.featurehook;
-        const ctx = this.#_basectx;
         if (null != data) {
-            featurehook(ctx, 'SetData');
+            featurehook(this._entctx, 'SetData');
             this.#data = { ...data };
         }
         let out = { ...this.#data };
-        featurehook(ctx, 'GetData');
+        featurehook(this._entctx, 'GetData');
         return out;
     }
     match(match) {
         const featurehook = this.#utility.featurehook;
-        const ctx = this.#_basectx;
         if (null != match) {
-            featurehook(ctx, 'SetMatch');
+            featurehook(this._entctx, 'SetMatch');
             this.#match = { ...match };
         }
         let out = { ...this.#match };
-        featurehook(ctx, 'GetMatch');
+        featurehook(this._entctx, 'GetMatch');
         return out;
+    }
+    toJSON() {
+        return { ...(this.#data || {}), _entity: 'EventLog' };
     }
     toString() {
         return 'EventLog ' + this.#utility.struct.jsonify(this.#data);
@@ -70,7 +68,7 @@ class EventLogEntity {
         let entity = this;
         let client = this.#client;
         const utility = this.#utility;
-        const { operator, spec, request, response, result, done, contextify, opify, featurehook } = utility;
+        const { contextify, done, error, featurehook, operator, opify, request, response, result, spec, } = utility;
         let fres = undefined;
         let op = opify({
             entity: 'event_log',
@@ -85,44 +83,62 @@ class EventLogEntity {
             validate: { "params": { "Lw-Client": "`$STRING`", "Authorization": "`$STRING`" } },
         });
         let ctx = contextify({
+            current: new WeakMap(),
             ctrl,
             op,
             match: this.#match,
             data: this.#data,
             reqmatch
-        }, this.#_basectx);
+        }, this._entctx);
         try {
             fres = featurehook(ctx, 'PreOperation');
             if (fres instanceof Promise) {
                 await fres;
             }
-            operator(ctx);
+            ctx.out.operator = operator(ctx);
+            if (ctx.out.operator instanceof Error) {
+                return error(ctx, ctx.out.operator);
+            }
             fres = featurehook(ctx, 'PreSpec');
             if (fres instanceof Promise) {
                 await fres;
             }
-            spec(ctx);
+            ctx.out.spec = spec(ctx);
+            if (ctx.out.spec instanceof Error) {
+                return error(ctx, ctx.out.spec);
+            }
             fres = featurehook(ctx, 'PreRequest');
             if (fres instanceof Promise) {
                 await fres;
             }
-            await request(ctx);
+            ctx.out.request = await request(ctx);
+            if (ctx.out.request instanceof Error) {
+                return error(ctx, ctx.out.request);
+            }
             fres = featurehook(ctx, 'PreResponse');
             if (fres instanceof Promise) {
                 await fres;
             }
-            await response(ctx);
+            ctx.out.response = await response(ctx);
+            if (ctx.out.response instanceof Error) {
+                return error(ctx, ctx.out.response);
+            }
             fres = featurehook(ctx, 'PreResult');
             if (fres instanceof Promise) {
                 await fres;
             }
-            result(ctx);
+            ctx.out.result = await result(ctx);
+            if (ctx.out.result instanceof Error) {
+                return error(ctx, ctx.out.result);
+            }
             fres = featurehook(ctx, 'PostOperation');
             if (fres instanceof Promise) {
                 await fres;
             }
-            if (null != ctx.result.resmatch) {
-                this.#match = ctx.result.resmatch;
+            if (null != ctx.result) {
+                if (null != ctx.result.resmatch) {
+                    this.#match = ctx.result.resmatch;
+                }
             }
             return done(ctx);
         }

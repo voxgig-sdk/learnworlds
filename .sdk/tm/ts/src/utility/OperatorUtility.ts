@@ -40,9 +40,19 @@ function opify(opmap: Record<string, any>) {
 
 
 // Ensure standard operation definition.
-function operator(ctx: Context): Operation {
-  const { op, utility } = ctx
+function operator(ctx: Context): Operation | Error {
+  if (ctx.out.operator) {
+    return ctx.out.operator
+  }
+
+  const { op, utility, options } = ctx
   const { validate } = utility.struct
+
+  if (!options.allow.op.includes(op.name)) {
+    return Error('Operation "' + op.name +
+      '" not allowed by SDK option allow.op value: "' + options.allow.op + '"')
+  }
+
 
   const opspec = {
 

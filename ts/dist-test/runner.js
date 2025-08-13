@@ -1,5 +1,5 @@
 "use strict";
-// VERSION: @voxgig/struct 0.0.4
+// VERSION: @voxgig/struct 0.0.8
 // This test utility runs the JSON-specified tests in build/test/test.json.
 // (or .sdk/test/test.json if used in a @voxgig/sdkgen project)
 Object.defineProperty(exports, "__esModule", { value: true });
@@ -109,7 +109,7 @@ function checkResult(entry, res, structUtils) {
     if (matched && (NULLMARK === out || null == out)) {
         return;
     }
-    (0, node_assert_1.deepEqual)(null != res ? JSON.parse(JSON.stringify(res)) : res, entry.out);
+    (0, node_assert_1.deepStrictEqual)(null != res ? JSON.parse(JSON.stringify(res)) : res, entry.out);
 }
 // Handle errors from test execution
 function handleError(entry, err, structUtils) {

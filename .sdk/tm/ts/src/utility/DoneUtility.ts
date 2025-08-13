@@ -15,7 +15,7 @@ function done(ctx: Context) {
     delprop(ctx.ctrl.explain.result, 'err')
   }
 
-  if (ctx.result.ok) {
+  if (ctx.result && ctx.result.ok) {
     return ctx.result.resdata
   }
 

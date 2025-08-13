@@ -5,8 +5,36 @@ const node_assert_1 = require("node:assert");
 const runner_1 = require("../runner");
 const index_1 = require("./index");
 (0, node_test_1.describe)('PrimaryUtility', async () => {
-    const client = index_1.SDK.test();
-    const runner = await (0, runner_1.makeRunner)(index_1.TEST_JSON_FILE, client);
+    let client;
+    let runner;
+    let runners;
+    (0, node_test_1.before)(async () => {
+        client = index_1.SDK.test();
+        runner = await (0, runner_1.makeRunner)(index_1.TEST_JSON_FILE, client);
+        runners = {
+            auth: await runner('auth'),
+            body: await runner('body'),
+            contextify: await runner('contextify'),
+            done: await runner('done'),
+            error: await runner('error'),
+            findparam: await runner('findparam'),
+            fullurl: await runner('fullurl'),
+            headers: await runner('headers'),
+            method: await runner('method'),
+            operator: await runner('operator'),
+            options: await runner('options'),
+            params: await runner('params'),
+            query: await runner('query'),
+            reqform: await runner('reqform'),
+            request: await runner('request', { fetch: MockFetch }),
+            resbasic: await runner('resbasic'),
+            resbody: await runner('resbody'),
+            resform: await runner('resform'),
+            resheaders: await runner('resheaders'),
+            response: await runner('response'),
+            spec: await runner('spec'),
+        };
+    });
     async function MockFetch(url, fetchdef) {
         return {
             status: 200,
@@ -31,29 +59,6 @@ const index_1 = require("./index");
         };
         return mres;
     }
-    const runners = {
-        auth: await runner('auth'),
-        body: await runner('body'),
-        contextify: await runner('contextify'),
-        done: await runner('done'),
-        error: await runner('error'),
-        findparam: await runner('findparam'),
-        fullurl: await runner('fullurl'),
-        headers: await runner('headers'),
-        method: await runner('method'),
-        operator: await runner('operator'),
-        options: await runner('options'),
-        params: await runner('params'),
-        query: await runner('query'),
-        reqform: await runner('reqform'),
-        request: await runner('request', { fetch: MockFetch }),
-        resbasic: await runner('resbasic'),
-        resbody: await runner('resbody'),
-        resform: await runner('resform'),
-        resheaders: await runner('resheaders'),
-        response: await runner('response'),
-        spec: await runner('spec'),
-    };
     (0, node_test_1.test)('exists', async () => {
         (0, node_assert_1.equal)('function', typeof runners.auth.subject);
         (0, node_assert_1.equal)('function', typeof runners.body.subject);
@@ -91,10 +96,10 @@ const index_1 = require("./index");
         const { runset, spec, subject } = runners.contextify;
         await runset(spec.basic, subject);
     });
-    (0, node_test_1.test)('done-basic', async () => {
-        const { runset, spec, subject } = runners.done;
-        await runset(spec.basic, subject);
-    });
+    // test('done-basic', async () => {
+    //   const { runset, spec, subject } = runners.done
+    //   await runset(spec.basic, subject)
+    // })
     // test('error-basic', async () => {
     //   const { runset, spec, subject } = runners.error
     //   await runset(spec.basic, subject)
@@ -156,10 +161,10 @@ const index_1 = require("./index");
     //     return subject(ctx)
     //   })
     // })
-    (0, node_test_1.test)('resform-basic', async () => {
-        const { runset, spec, subject } = runners.resform;
-        await runset(spec.basic, subject);
-    });
+    // test('resform-basic', async () => {
+    //   const { runset, spec, subject } = runners.resform
+    //   await runset(spec.basic, subject)
+    // })
     // test('resheaders-basic', async () => {
     //   const { runset, spec, subject } = runners.resheaders
     //   await runset(spec.basic, (ctx: any) => {

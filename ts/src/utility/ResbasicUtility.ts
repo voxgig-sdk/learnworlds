@@ -5,7 +5,7 @@ import { Context } from '../types'
 function resbasic(ctx: Context) {
   const { response, result } = ctx
 
-  if (null != response) {
+  if (null != result && null != response) {
     result.status = response.status || -1
     result.statusText = response.statusText || 'no-status'
 

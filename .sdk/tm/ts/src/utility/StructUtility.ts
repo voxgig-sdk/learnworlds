@@ -1,5 +1,7 @@
 /* Copyright (c) 2025 Voxgig Ltd. MIT LICENSE. */
 
+// VERSION: @voxgig/struct 0.0.8
+
 /* Voxgig Struct
  * =============
  *
@@ -73,21 +75,22 @@ const S_array = 'array'
 const S_base = 'base'
 const S_boolean = 'boolean'
 const S_function = 'function'
+const S_instance = 'instance'
+const S_key = 'key'
+const S_null = 'null'
 const S_number = 'number'
 const S_object = 'object'
 const S_string = 'string'
-const S_null = 'null'
-const S_key = 'key'
-const S_MT = ''
 const S_BT = '`'
+const S_CN = ':'
+const S_CS = ']'
 const S_DS = '$'
 const S_DT = '.'
-const S_CN = ':'
 const S_FS = '/'
-const S_OS = '['
-const S_CS = ']'
-const S_SP = ' '
 const S_KEY = 'KEY'
+const S_MT = ''
+const S_OS = '['
+const S_SP = ' '
 const S_VIZ = ': '
 
 
@@ -306,7 +309,9 @@ function pad(str: any, padding?: number, padchar?: string): string {
 
 
 // Determine the type of a value as a string.
-// Returns one of: 'null', 'string', 'number', 'boolean', 'function', 'array', 'object'
+// Returns one of:
+//   'null', 'string', 'number', 'boolean', 'function', 'array', 'object', 'instance'
+//   where 'instance' is an instance of a class, and 'null' is undefined, null, or NaN.
 // Normalizes and simplifies JavaScript's type system for consistency.
 function typify(value: any): string {
   if (value === null || value === undefined) {
@@ -315,11 +320,23 @@ function typify(value: any): string {
 
   const type = typeof value
 
+  if (S_number === type && isNaN(value)) {
+    return S_null
+  }
+
   if (Array.isArray(value)) {
     return S_array
   }
 
   if (type === 'object') {
+
+    if (value.constructor instanceof Function) {
+      let cname = value.constructor.name
+      if ('Object' !== cname && 'Array' !== cname) {
+        return S_instance
+      }
+    }
+
     return S_object
   }
 
@@ -401,7 +418,7 @@ function strkey(key: any = UNDEF): string {
 }
 
 
-// Sorted keys of a map, or indexes of a list.
+// Sorted keys of a map, or indexes (as strings) of a list.
 function keysof(val: any): string[] {
   return !isnode(val) ? [] :
     ismap(val) ? Object.keys(val).sort() : (val as any).map((_n: any, i: number) => S_MT + i)
@@ -415,8 +432,8 @@ function haskey(val: any, key: any) {
 
 
 // List the sorted keys of a map or list as an array of tuples of the form [key, value].
-// NOTE: Unlike keysof, list indexes are returned as numbers.
-function items(val: any): [number | string, any][] {
+// As with keysof, list indexes are converted to strings.
+function items(val: any): [string, any][] {
   return keysof(val).map((k: any) => [k, val[k]])
 }
 
@@ -689,22 +706,38 @@ function setprop<PARENT>(parent: PARENT, key: any, val: any): PARENT {
 function walk(
   // These arguments are the public interface.
   val: any,
-  apply: WalkApply,
+
+  // Before descending into a node.
+  before?: WalkApply,
+
+  // After descending into a node.
+  after?: WalkApply,
+
+  // Maximum recursive depth, default: 32. Use null for infinite depth.
+  maxdepth?: number,
 
   // These areguments are used for recursive state.
   key?: string | number,
   parent?: any,
   path?: string[]
 ): any {
-  if (isnode(val)) {
-    for (let [ckey, child] of items(val)) {
-      setprop(val, ckey, walk(child, apply, ckey, val, [...(path || []), S_MT + ckey]))
+  let out = null == before ? val : before(key, val, parent, path || [])
+
+  maxdepth = null != maxdepth && 0 <= maxdepth ? maxdepth : 32
+  if (0 === maxdepth || (null != path && 0 < maxdepth && maxdepth <= path.length)) {
+    return out
+  }
+
+  if (isnode(out)) {
+    for (let [ckey, child] of items(out)) {
+      setprop(out, ckey, walk(
+        child, before, after, maxdepth, ckey, out, [...(path || []), S_MT + ckey]))
     }
   }
 
-  // Nodes are applied *after* their children.
-  // For the root node, key and parent will be undefined.
-  return apply(key, val, parent, path || [])
+  out = null == after ? out : after(key, out, parent, path || [])
+
+  return out
 }
 
 
@@ -712,7 +745,7 @@ function walk(
 // precedence.  Nodes override scalars. Node kinds (list or map)
 // override each other, and do *not* merge.  The first element is
 // modified.
-function merge(val: any): any {
+function merge(val: any, maxdepth?: number): any {
   let out: any = UNDEF
 
   // Handle edge cases.
@@ -741,74 +774,78 @@ function merge(val: any): any {
       out = obj
     }
     else {
-      // Nodes win, also over nodes of a different kind.
-      if (!isnode(out) || (ismap(obj) && islist(out)) || (islist(obj) && ismap(out))) {
-        out = obj
-      }
-      else {
-        // Node stack. walking down the current obj.
-        let cur: any[] = [out]
-        let cI = 0
+      // Current value at path end in overriding node.
+      let cur: any[] = [out]
 
-        function merger(
-          key: string | number | undefined,
-          val: any,
-          parent: any,
-          path: string[]
-        ) {
-          // No key at top.
-          if (null == key) {
-            return val
-          }
+      // Current value at path end in destination node.
+      let dst: any[] = [out]
 
-          // Get the current value at the current path in obj.
-          // NOTE: this is not exactly efficient, and should be optimised.
-          let lenpath = path.length
-          cI = lenpath - 1
-          if (UNDEF === cur[cI]) {
-            cur[cI] = getpath(out, slice(path, 0, lenpath - 1))
-          }
+      function before(
+        key: string | number | undefined,
+        val: any,
+        _parent: any,
+        path: string[]
+      ) {
+        const pI = size(path)
 
-          // console.log('AAA', path, cur[cI])
-
-          // Create node if needed.
-          if (!isnode(cur[cI])) {
-            cur[cI] = islist(parent) ? [] : {}
-          }
-
-          // console.log('BBB', path, cur[cI])
-
-          // console.log('VAL', path, val, isnode(val), isempty(val))
-
-          // Node child is just ahead of us on the stack, since
-          // `walk` traverses leaves before nodes.
-          if (isnode(val)) {
-            const missing = UNDEF === getprop(cur[cI], key)
-            if (!isempty(val) || missing) { //  || ) {
-              // console.log('CCC')
-
-              // if (missing) {
-              //   console.log('MISSING', key, val, cur[cI], cur[cI + 1])
-              // }
-
-              const mval = missing ? val : cur[cI + 1]
-              setprop(cur[cI], key, mval)
-              cur[cI + 1] = UNDEF
-            }
-          }
-
-          // Scalar child.
-          else {
-            // console.log('DDD', cur[cI], key, val)
-            setprop(cur[cI], key, val)
-          }
-
-          return val
+        // Scalars just override directly.
+        if (!isnode(val)) {
+          cur[pI] = val
         }
 
-        // Walk overriding node, creating paths in output as needed.
-        walk(obj, merger)
+        // Descend into override node - Set up correct target in `after` function.
+        else {
+
+          // Descend into destination node using same key.
+          dst[pI] = 0 < pI ? getprop(dst[pI - 1], key) : dst[pI]
+          const tval = dst[pI]
+
+          // Destination empty, so create node (unless override is class instance).
+          if (UNDEF === tval && S_instance !== typify(val)) {
+            cur[pI] = islist(val) ? [] : {}
+          }
+
+          // Matching override and destination so continue with their values.
+          else if (typify(val) === typify(tval)) {
+            cur[pI] = tval
+          }
+
+          // Override wins.
+          else {
+            cur[pI] = val
+
+            // No need to descend when override wins (destination is discarded).
+            val = UNDEF
+          }
+        }
+
+        // console.log('BEFORE-END', pathify(path), '@', pI, key,
+        //   stringify(val, -1, 1), stringify(parent, -1, 1),
+        //   'CUR=', stringify(cur, -1, 1), 'DST=', stringify(dst, -1, 1))
+
+        return val
       }
+
+
+      function after(
+        key: string | number | undefined,
+        _val: any,
+        _parent: any,
+        path: string[]
+      ) {
+        const cI = size(path)
+        const target = cur[cI - 1]
+        const value = cur[cI]
+
+        // console.log('AFTER-PREP', pathify(path), '@', cI,
+        //   stringify(key, -1, 1), stringify(value, -1, 1), 'T=', stringify(target, -1, 1))
+
+        setprop(target, key, value)
+        return value
+      }
+
+      // Walk overriding node, creating paths in output as needed.
+      out = walk(obj, before, after, maxdepth)
     }
   }
 
@@ -1498,69 +1535,15 @@ const validate_STRING: Injector = (inj: Injection) => {
 }
 
 
-// A required number value (int or float).
-const validate_NUMBER: Injector = (inj: Injection) => {
+
+
+const validate_TYPE: Injector = (inj: Injection, _val: any, ref: string) => {
+  let tname = slice(ref, 1).toLowerCase()
   let out = getprop(inj.dparent, inj.key)
 
   const t = typify(out)
-  if (S_number !== t) {
-    inj.errs.push(_invalidTypeMsg(inj.path, S_number, t, out, 'V1020'))
-    return UNDEF
-  }
-
-  return out
-}
-
-
-// A required boolean value.
-const validate_BOOLEAN: Injector = (inj: Injection) => {
-  let out = getprop(inj.dparent, inj.key)
-
-  const t = typify(out)
-  if (S_boolean !== t) {
-    inj.errs.push(_invalidTypeMsg(inj.path, S_boolean, t, out, 'V1030'))
-    return UNDEF
-  }
-
-  return out
-}
-
-
-// A required object (map) value (contents not validated).
-const validate_OBJECT: Injector = (inj: Injection) => {
-  let out = getprop(inj.dparent, inj.key)
-
-  const t = typify(out)
-  if (t !== S_object) {
-    inj.errs.push(_invalidTypeMsg(inj.path, S_object, t, out, 'V1040'))
-    return UNDEF
-  }
-
-  return out
-}
-
-
-// A required array (list) value (contents not validated).
-const validate_ARRAY: Injector = (inj: Injection) => {
-  let out = getprop(inj.dparent, inj.key)
-
-  const t = typify(out)
-  if (t !== S_array) {
-    inj.errs.push(_invalidTypeMsg(inj.path, S_array, t, out, 'V1050'))
-    return UNDEF
-  }
-
-  return out
-}
-
-
-// A required function value.
-const validate_FUNCTION: Injector = (inj: Injection) => {
-  let out = getprop(inj.dparent, inj.key)
-
-  const t = typify(out)
-  if (S_function !== t) {
-    inj.errs.push(_invalidTypeMsg(inj.path, S_function, t, out, 'V1060'))
+  if (t !== tname) {
+    inj.errs.push(_invalidTypeMsg(inj.path, tname, t, out, 'V1001'))
     return UNDEF
   }
 
@@ -1916,11 +1899,12 @@ function validate(
     $PACK: null,
 
     $STRING: validate_STRING,
-    $NUMBER: validate_NUMBER,
-    $BOOLEAN: validate_BOOLEAN,
-    $OBJECT: validate_OBJECT,
-    $ARRAY: validate_ARRAY,
-    $FUNCTION: validate_FUNCTION,
+    $NUMBER: validate_TYPE,
+    $BOOLEAN: validate_TYPE,
+    $OBJECT: validate_TYPE,
+    $ARRAY: validate_TYPE,
+    $FUNCTION: validate_TYPE,
+    $INSTANCE: validate_TYPE,
     $ANY: validate_ANY,
     $CHILD: validate_CHILD,
     $ONE: validate_ONE,
@@ -1933,11 +1917,8 @@ function validate(
     $ERRS: errs,
   }
 
-  let meta = { [S_BEXACT]: false }
-
-  if (injdef?.meta) {
-    meta = merge([meta, injdef.meta])
-  }
+  let meta = getprop(injdef, 'meta', {})
+  setprop(meta, S_BEXACT, getprop(meta, S_BEXACT, false))
 
   const out = transform(data, spec, {
     meta,
@@ -2166,7 +2147,7 @@ class Injection {
   nodes: any[]              // Stack of ancestor nodes.
   handler: Injector         // Custom handler for injections.
   errs: any[]               // Error collector.  
-  meta: Record<string, any> // Custom meta data.
+  meta: Record<string, any> // Custom meta data. NOTE: do not merge, values must remain as-is.
   dparent: any              // Current data parent node (contains current data value).
   dpath: string[]           // Current data value path
   base?: string             // Base key for data in store, if any. 
@@ -2235,6 +2216,7 @@ class Injection {
       }
     }
 
+    // TODO: is this needed?
     return this.dparent
   }
 

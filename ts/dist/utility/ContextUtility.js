@@ -2,54 +2,69 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Context = void 0;
 exports.contextify = contextify;
+const node_util_1 = require("node:util");
 const StructUtility_1 = require("./StructUtility");
 function contextify(ctxmap, basectx) {
-    const ctx = new Context();
-    ctx.ctrl = (0, StructUtility_1.getprop)(ctxmap, 'ctrl', (0, StructUtility_1.getprop)(basectx, 'ctrl', {}));
-    ctx.meta = (0, StructUtility_1.getprop)(ctxmap, 'meta', (0, StructUtility_1.getprop)(basectx, 'meta', {}));
-    ctx.work = (0, StructUtility_1.getprop)(ctxmap, 'work', (0, StructUtility_1.getprop)(basectx, 'work', {}));
-    ctx.client = (0, StructUtility_1.getprop)(ctxmap, 'client', (0, StructUtility_1.getprop)(basectx, 'client'));
-    ctx.config = (0, StructUtility_1.getprop)(ctxmap, 'config', (0, StructUtility_1.getprop)(basectx, 'config'));
-    ctx.entity = (0, StructUtility_1.getprop)(ctxmap, 'entity', (0, StructUtility_1.getprop)(basectx, 'entity'));
-    ctx.op = (0, StructUtility_1.getprop)(ctxmap, 'op', (0, StructUtility_1.getprop)(basectx, 'op'));
-    ctx.entopts = (0, StructUtility_1.getprop)(ctxmap, 'entopts', (0, StructUtility_1.getprop)(basectx, 'entopts'));
-    ctx.options = (0, StructUtility_1.getprop)(ctxmap, 'options', (0, StructUtility_1.getprop)(basectx, 'options'));
-    ctx.response = (0, StructUtility_1.getprop)(ctxmap, 'response', (0, StructUtility_1.getprop)(basectx, 'response'));
-    ctx.result = (0, StructUtility_1.getprop)(ctxmap, 'result', (0, StructUtility_1.getprop)(basectx, 'result'));
-    ctx.spec = (0, StructUtility_1.getprop)(ctxmap, 'spec', (0, StructUtility_1.getprop)(basectx, 'spec'));
-    ctx.utility = (0, StructUtility_1.getprop)(ctxmap, 'utility', (0, StructUtility_1.getprop)(basectx, 'utility'));
-    ctx.data = (0, StructUtility_1.getprop)(ctxmap, 'data', (0, StructUtility_1.getprop)(basectx, 'data'));
-    ctx.reqdata = (0, StructUtility_1.getprop)(ctxmap, 'reqdata', (0, StructUtility_1.getprop)(basectx, 'reqdata'));
-    ctx.match = (0, StructUtility_1.getprop)(ctxmap, 'match', (0, StructUtility_1.getprop)(basectx, 'match'));
-    ctx.reqmatch = (0, StructUtility_1.getprop)(ctxmap, 'reqmatch', (0, StructUtility_1.getprop)(basectx, 'reqmatch'));
+    const ctx = new Context(ctxmap, basectx);
     return ctx;
 }
 class Context {
+    id = 'C' + ('' + Math.random()).substring(2, 10);
+    // Store the output of each operation step.
+    out = {};
+    // Store for the current operation.
+    current = new WeakMap();
     ctrl = {};
     meta = {};
-    work = {};
-    client = undefined;
-    config = undefined;
-    entity = undefined;
-    op = undefined;
-    entopts = undefined;
-    options = undefined;
-    response = undefined;
-    result = undefined;
-    spec = undefined;
-    utility = undefined;
-    data = undefined;
-    reqdata = undefined;
-    match = undefined;
-    reqmatch = undefined;
+    client;
+    utility;
+    op;
+    config;
+    entopts;
+    options;
+    response;
+    result;
+    spec;
+    data;
+    reqdata;
+    match;
+    reqmatch;
+    entity;
+    // Shared persistent store.
+    shared;
+    constructor(ctxmap, basectx) {
+        this.client = (0, StructUtility_1.getprop)(ctxmap, 'client', (0, StructUtility_1.getprop)(basectx, 'client'));
+        this.utility = (0, StructUtility_1.getprop)(ctxmap, 'utility', (0, StructUtility_1.getprop)(basectx, 'utility'));
+        this.ctrl = (0, StructUtility_1.getprop)(ctxmap, 'ctrl', (0, StructUtility_1.getprop)(basectx, 'ctrl', this.ctrl));
+        this.meta = (0, StructUtility_1.getprop)(ctxmap, 'meta', (0, StructUtility_1.getprop)(basectx, 'meta', this.meta));
+        this.op = (0, StructUtility_1.getprop)(ctxmap, 'op', (0, StructUtility_1.getprop)(basectx, 'op'));
+        this.config = (0, StructUtility_1.getprop)(ctxmap, 'config', (0, StructUtility_1.getprop)(basectx, 'config'));
+        this.entopts = (0, StructUtility_1.getprop)(ctxmap, 'entopts', (0, StructUtility_1.getprop)(basectx, 'entopts'));
+        this.options = (0, StructUtility_1.getprop)(ctxmap, 'options', (0, StructUtility_1.getprop)(basectx, 'options'));
+        this.entity = (0, StructUtility_1.getprop)(ctxmap, 'entity', (0, StructUtility_1.getprop)(basectx, 'entity'));
+        this.shared = (0, StructUtility_1.getprop)(ctxmap, 'sharedd', (0, StructUtility_1.getprop)(basectx, 'shared'));
+        // this.data = getprop(ctxmap, 'data', getprop(basectx, 'data'))
+        // this.match = getprop(ctxmap, 'match', getprop(basectx, 'match'))
+        this.data = (0, StructUtility_1.getprop)(ctxmap, 'data');
+        this.reqdata = (0, StructUtility_1.getprop)(ctxmap, 'reqdata');
+        this.match = (0, StructUtility_1.getprop)(ctxmap, 'match');
+        this.reqmatch = (0, StructUtility_1.getprop)(ctxmap, 'reqmatch');
+    }
     toJSON() {
         return {
+            id: this.id,
             op: this.op,
             spec: this.spec,
             entity: this.entity,
             result: this.result,
             meta: this.meta,
         };
+    }
+    toString() {
+        return 'Context ' + this.utility?.struct.jsonify(this.toJSON());
+    }
+    [node_util_1.inspect.custom]() {
+        return this.toString();
     }
 }
 exports.Context = Context;

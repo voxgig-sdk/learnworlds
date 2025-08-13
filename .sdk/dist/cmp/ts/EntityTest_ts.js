@@ -51,7 +51,7 @@ function basicSetup(extra?: any) {
   
   setup.client = client    
   setup.struct = client.utility().struct
-  setup.explain = 'TRUE' === setup.dm.p.${model.Name}_TEST_EXPLAIN
+  setup.explain = 'TRUE' === setup.dm.p.${model.NAME}_TEST_EXPLAIN
 
   return setup
 }
@@ -139,6 +139,7 @@ function basicSetup(extra?: any) {
     catch(err: any) {
       console.dir(dm, {depth: null})
       if( explain ) { console.dir(ctrl.explain, {depth: null}) }
+      console.log(err)
       throw err
     }
 `);

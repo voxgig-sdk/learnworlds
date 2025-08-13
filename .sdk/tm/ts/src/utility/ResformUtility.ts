@@ -15,7 +15,7 @@ function resform(ctx: Context) {
     spec.step = 'resform'
   }
 
-  if (!result.ok) {
+  if (null == result || !result.ok) {
     return undefined
   }
 

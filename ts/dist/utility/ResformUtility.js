@@ -12,7 +12,7 @@ function resform(ctx) {
     if (spec) {
         spec.step = 'resform';
     }
-    if (!result.ok) {
+    if (null == result || !result.ok) {
         return undefined;
     }
     try {

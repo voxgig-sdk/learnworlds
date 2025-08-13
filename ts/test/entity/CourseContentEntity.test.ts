@@ -41,22 +41,23 @@ describe('CourseContentEntity', async () => {
       const load_course_content0 = makeStepData(dm, 'load_course_content0')
       load_course_content0.entity = client.CourseContent()
       load_course_content0.match = makeMatch(dm, transform, {
-        "id": "`dm$=p.LEARNWORLDS_TEST_COURSE_CONTENT_ENTID.course_content01`",
-        "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`"
+        "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`",
+        "id": "`dm$=p.LEARNWORLDS_TEST_COURSE_CONTENT_ENTID.course_content01`"
       })
       load_course_content0.resdata =
         await load_course_content0.entity.load(load_course_content0.match, ctrl = makeCtrl(explain))
       if( explain ) { console.log('load_course_content0: ', ctrl.explain) }
       makeValid(dm, validate, load_course_content0.resdata, {
         "`$OPEN`": true,
-        "id": "`dm$=s.load_course_content0.match.id`",
-        "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`"
+        "course_id": "`dm$=p.LEARNWORLDS_TEST_COURSE_ENTID.course01`",
+        "id": "`dm$=s.load_course_content0.match.id`"
       })
  
     }
     catch(err: any) {
       console.dir(dm, {depth: null})
       if( explain ) { console.dir(ctrl.explain, {depth: null}) }
+      console.log(err)
       throw err
     }
 
@@ -124,7 +125,7 @@ function basicSetup(extra?: any) {
   
   setup.client = client    
   setup.struct = client.utility().struct
-  setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN
+  setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN
 
   return setup
 }

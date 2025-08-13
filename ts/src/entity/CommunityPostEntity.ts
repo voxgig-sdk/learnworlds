@@ -21,7 +21,7 @@ class CommunityPostEntity {
   #data: any
   #match: any
 
-  #_basectx: any
+  _entctx: Context
 
   constructor(client: LearnworldsSDK, entopts: any) {
     // super()
@@ -35,16 +35,14 @@ class CommunityPostEntity {
     this.#match = {}
 
     const contextify = this.#utility.contextify
-    this.#_basectx = contextify({
+
+    this._entctx = contextify({
       entity: this,
-      client,
-      utility: this.#utility,
       entopts,
-      options: client.options()
-    })
+    }, client._rootctx)
 
     const featurehook = this.#utility.featurehook
-    featurehook(this.#_basectx, 'PostConstructEntity')
+    featurehook(this._entctx, 'PostConstructEntity')
   }
 
   entopts() {
@@ -62,35 +60,37 @@ class CommunityPostEntity {
 
   data(this: any, data?: any) {
     const featurehook = this.#utility.featurehook
-    const ctx = this.#_basectx
 
     if (null != data) {
-      featurehook(ctx, 'SetData')
+      featurehook(this._entctx, 'SetData')
       this.#data = { ...data }
     }
 
     let out = { ...this.#data }
 
-    featurehook(ctx, 'GetData')
+    featurehook(this._entctx, 'GetData')
     return out
   }
 
 
   match(match?: any) {
     const featurehook = this.#utility.featurehook
-    const ctx = this.#_basectx
 
     if (null != match) {
-      featurehook(ctx, 'SetMatch')
+      featurehook(this._entctx, 'SetMatch')
       this.#match = { ...match }
     }
 
     let out = { ...this.#match }
 
-    featurehook(ctx, 'GetMatch')
+    featurehook(this._entctx, 'GetMatch')
     return out
   }
 
+
+  toJSON() {
+    return { ...(this.#data || {}), _entity: 'CommunityPost' }
+  }
 
   toString() {
     return 'CommunityPost ' + this.#utility.struct.jsonify(this.#data)
@@ -107,8 +107,18 @@ class CommunityPostEntity {
     const entity = this
     const client = this.#client
     const utility = this.#utility
+
     const {
-      operator, spec, request, response, result, done, contextify, opify, featurehook
+      contextify,
+      done,
+      error,
+      featurehook,
+      operator,
+      opify,
+      request,
+      response,
+      result,
+      spec,
     } = utility
 
     let fres: Promise<any> | undefined = undefined
@@ -129,12 +139,13 @@ class CommunityPostEntity {
     })
 
     let ctx: Context = contextify({
+      current: new WeakMap(),
       ctrl,
       op,
       match: this.#match,
       data: this.#data,
       reqmatch
-    }, this.#_basectx)
+    }, this._entctx)
 
     try {
 
@@ -142,47 +153,64 @@ class CommunityPostEntity {
       fres = featurehook(ctx, 'PreOperation')
       if (fres instanceof Promise) { await fres }
 
-      operator(ctx)
+      ctx.out.operator = operator(ctx)
+      if (ctx.out.operator instanceof Error) {
+        return error(ctx, ctx.out.operator)
+      }
 
 
 
       fres = featurehook(ctx, 'PreSpec')
       if (fres instanceof Promise) { await fres }
 
-      spec(ctx)
+      ctx.out.spec = spec(ctx)
+      if (ctx.out.spec instanceof Error) {
+        return error(ctx, ctx.out.spec)
+      }
 
 
 
       fres = featurehook(ctx, 'PreRequest')
       if (fres instanceof Promise) { await fres }
 
-      await request(ctx)
+      ctx.out.request = await request(ctx)
+      if (ctx.out.request instanceof Error) {
+        return error(ctx, ctx.out.request)
+      }
 
 
 
       fres = featurehook(ctx, 'PreResponse')
       if (fres instanceof Promise) { await fres }
 
-      await response(ctx)
+      ctx.out.response = await response(ctx)
+      if (ctx.out.response instanceof Error) {
+        return error(ctx, ctx.out.response)
+      }
 
 
 
       fres = featurehook(ctx, 'PreResult')
       if (fres instanceof Promise) { await fres }
 
-      result(ctx)
+      ctx.out.result = await result(ctx)
+      if (ctx.out.result instanceof Error) {
+        return error(ctx, ctx.out.result)
+      }
 
 
 
       fres = featurehook(ctx, 'PostOperation')
       if (fres instanceof Promise) { await fres }
 
-      if (null != ctx.result.resmatch) {
-        this.#match = ctx.result.resmatch
-      }
+      if (null != ctx.result) {
+        if (null != ctx.result.resmatch) {
+          this.#match = ctx.result.resmatch
+        }
 
-      if (null != ctx.result.resdata) {
-        this.#data = ctx.result.resdata
+        if (null != ctx.result.resdata) {
+          this.#data = ctx.result.resdata
+        }
       }
 
       return done(ctx)
@@ -206,7 +234,16 @@ class CommunityPostEntity {
     let client = this.#client
     const utility = this.#utility
     const {
-      operator, spec, request, response, result, done, contextify, opify, featurehook
+      contextify,
+      done,
+      error,
+      featurehook,
+      operator,
+      opify,
+      request,
+      response,
+      result,
+      spec,
     } = utility
 
     let fres: Promise<any> | undefined = undefined
@@ -225,12 +262,13 @@ class CommunityPostEntity {
     })
 
     let ctx: Context = contextify({
+      current: new WeakMap(),
       ctrl,
       op,
       match: this.#match,
       data: this.#data,
       reqmatch
-    }, this.#_basectx)
+    }, this._entctx)
 
     try {
 
@@ -238,43 +276,60 @@ class CommunityPostEntity {
       fres = featurehook(ctx, 'PreOperation')
       if (fres instanceof Promise) { await fres }
 
-      operator(ctx)
+      ctx.out.operator = operator(ctx)
+      if (ctx.out.operator instanceof Error) {
+        return error(ctx, ctx.out.operator)
+      }
 
 
 
       fres = featurehook(ctx, 'PreSpec')
       if (fres instanceof Promise) { await fres }
 
-      spec(ctx)
+      ctx.out.spec = spec(ctx)
+      if (ctx.out.spec instanceof Error) {
+        return error(ctx, ctx.out.spec)
+      }
 
 
 
       fres = featurehook(ctx, 'PreRequest')
       if (fres instanceof Promise) { await fres }
 
-      await request(ctx)
+      ctx.out.request = await request(ctx)
+      if (ctx.out.request instanceof Error) {
+        return error(ctx, ctx.out.request)
+      }
 
 
 
       fres = featurehook(ctx, 'PreResponse')
       if (fres instanceof Promise) { await fres }
 
-      await response(ctx)
+      ctx.out.response = await response(ctx)
+      if (ctx.out.response instanceof Error) {
+        return error(ctx, ctx.out.response)
+      }
 
 
 
       fres = featurehook(ctx, 'PreResult')
       if (fres instanceof Promise) { await fres }
 
-      result(ctx)
+      ctx.out.result = await result(ctx)
+      if (ctx.out.result instanceof Error) {
+        return error(ctx, ctx.out.result)
+      }
 
 
 
       fres = featurehook(ctx, 'PostOperation')
       if (fres instanceof Promise) { await fres }
 
-      if (null != ctx.result.resmatch) {
-        this.#match = ctx.result.resmatch
+      if (null != ctx.result) {
+        if (null != ctx.result.resmatch) {
+          this.#match = ctx.result.resmatch
+        }
       }
 
       return done(ctx)
@@ -290,6 +345,9 @@ class CommunityPostEntity {
       }
     }
   }
+
+
+
 
 
 

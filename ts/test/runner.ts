@@ -1,10 +1,10 @@
-// VERSION: @voxgig/struct 0.0.4
+// VERSION: @voxgig/struct 0.0.8
 // This test utility runs the JSON-specified tests in build/test/test.json.
 // (or .sdk/test/test.json if used in a @voxgig/sdkgen project)
 
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
-import { deepEqual, fail, AssertionError } from 'node:assert'
+import { deepStrictEqual, fail, AssertionError } from 'node:assert'
 
 const NULLMARK = '__NULL__' // Value is JSON null
 const UNDEFMARK = '__UNDEF__' // Value is not present (thus, undefined).
@@ -193,7 +193,7 @@ function checkResult(entry: any, res: any, structUtils: Record<string, any>) {
     return
   }
 
-  deepEqual(null != res ? JSON.parse(JSON.stringify(res)) : res, entry.out)
+  deepStrictEqual(null != res ? JSON.parse(JSON.stringify(res)) : res, entry.out)
 }
 
 

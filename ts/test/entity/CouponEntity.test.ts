@@ -41,6 +41,7 @@ describe('CouponEntity', async () => {
     catch(err: any) {
       console.dir(dm, {depth: null})
       if( explain ) { console.dir(ctrl.explain, {depth: null}) }
+      console.log(err)
       throw err
     }
 
@@ -98,7 +99,7 @@ function basicSetup(extra?: any) {
   
   setup.client = client    
   setup.struct = client.utility().struct
-  setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN
+  setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN
 
   return setup
 }

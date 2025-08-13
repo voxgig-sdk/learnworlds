@@ -25,15 +25,20 @@ async function run() {
       apikey: process.env.LEARNWORLDS_APIKEY,
       headers: {
         'Lw-Client': process.env.LEARNWORLDS_CLIENTID
+      },
+      allow: {
+        // op: ''
+        // method: ''
       }
     }
     // console.log(opts)
     const client = new LearnworldsSDK(opts)
 
+    // console.log(client.options())
 
     let q: any = {}
 
-    // works
+    // // works
     const u0 = client.User()
     q = {
       id: useridmap.user01

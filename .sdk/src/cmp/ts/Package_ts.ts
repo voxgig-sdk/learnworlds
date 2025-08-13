@@ -41,7 +41,7 @@ const Package = cmp(async function Package(props: any) {
     types: `dist/${model.const.Name}SDK.d.ts`,
     scripts: {
       'test': 'node --enable-source-maps --test dist-test/**/*.test.js',
-      'test-some': 'node --enable-source-maps ' +
+      'test-some': 'node --enable-source-maps --experimental-test-isolation=none ' +
         '--test-name-pattern=\"$npm_config_pattern\" --test dist-test/**/*.test.js',
       'test-utility': 'node --enable-source-maps --test test/utility/*.test.ts',
 

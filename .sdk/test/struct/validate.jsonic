@@ -71,6 +71,16 @@ basic: {
 
     { in: { data: {a2:[]}, spec: {a2:{}} },
       err:'Expected field a2 to be object, but found array: [].' }
+
+    { in: { data: '', spec: '`$STRING`' },
+      err:'Empty string at <root>' }
+
+    { in: { data: {s0:''}, spec: {s0:'`$STRING`'} },
+      err:'Empty string at s0' }
+      
+    { in: { data: {s1:''}, spec: {s1:['`$ONE`','`$STRING`','']} },
+      out: {s1:''} }
+
   ]
 }
 

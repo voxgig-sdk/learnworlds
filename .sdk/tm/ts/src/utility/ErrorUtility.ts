@@ -1,5 +1,5 @@
 
-import { Context } from '../types'
+import { Result, Context } from '../types'
 
 
 import { clean } from './CleanUtility'
@@ -13,7 +13,8 @@ function error(ctx: Context, err?: any) {
   const op = ctx.op || {}
   op.name = op.name || 'unknown operation'
 
-  const result = ctx.result = ctx.result || {}
+
+  const result = ctx.result || ({} as Result)
   result.ok = false
 
   const reserr = result.err
@@ -46,7 +47,7 @@ function error(ctx: Context, err?: any) {
 
   // TODO: model option to return instead
   if (false === ctx.ctrl.throw) {
-    return ctx.result.resdata
+    return result.resdata
   }
   else {
     throw err

@@ -7,6 +7,12 @@ function fullurl(ctx) {
     const struct = utility.struct;
     const { escurl, escre, joinurl } = struct;
     const { spec, result } = ctx;
+    if (null == spec) {
+        return new Error('Expected context spec property to be defined.');
+    }
+    if (null == result) {
+        return new Error('Expected context result property to be defined.');
+    }
     let url = joinurl([spec.base, spec.prefix, spec.path, spec.suffix]);
     let resmatch = {};
     const params = spec.params;

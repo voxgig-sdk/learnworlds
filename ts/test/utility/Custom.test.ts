@@ -4,38 +4,39 @@ import { equal } from 'node:assert'
 
 import { LearnworldsSDK } from '../..'
 
-const client = LearnworldsSDK.test({}, {
-  apikey: 'APIKEY01',
-
-  // NOTE: original utility.options must remain in place.
-  utility: {
-    auth: () => ({ util: 'AUTH' }),
-    body: () => ({ util: 'BODY' }),
-    contextify: () => ({ util: 'CONTEXTIFY' }),
-    done: () => ({ util: 'DONE' }),
-    error: () => ({ util: 'ERROR' }),
-    findparam: () => ({ util: 'FINDPARAM' }),
-    fullurl: () => ({ util: 'FULLURL' }),
-    headers: () => ({ util: 'HEADERS' }),
-    method: () => ({ util: 'METHOD' }),
-    operator: () => ({ util: 'OPERATOR' }),
-    params: () => ({ util: 'PARAMS' }),
-    query: () => ({ util: 'QUERY' }),
-    reqform: () => ({ util: 'REQFORM' }),
-    request: () => ({ util: 'REQUEST' }),
-    resbasic: () => ({ util: 'RESBASIC' }),
-    resbody: () => ({ util: 'RESBODY' }),
-    resform: () => ({ util: 'RESFORM' }),
-    resheaders: () => ({ util: 'RESHEADERS' }),
-    response: () => ({ util: 'RESPONSE' }),
-    result: () => ({ util: 'RESULT' }),
-    spec: () => ({ util: 'SPEC' }),
-  }
-})
-
 
 describe('Custom', () => {
+
   test('basic', async () => {
+    const client = LearnworldsSDK.test({}, {
+      apikey: 'APIKEY01',
+
+      // NOTE: original utility.options must remain in place.
+      utility: {
+        auth: () => ({ util: 'AUTH' }),
+        body: () => ({ util: 'BODY' }),
+        contextify: () => ({ util: 'CONTEXTIFY' }),
+        done: () => ({ util: 'DONE' }),
+        error: () => ({ util: 'ERROR' }),
+        findparam: () => ({ util: 'FINDPARAM' }),
+        fullurl: () => ({ util: 'FULLURL' }),
+        headers: () => ({ util: 'HEADERS' }),
+        method: () => ({ util: 'METHOD' }),
+        operator: () => ({ util: 'OPERATOR' }),
+        params: () => ({ util: 'PARAMS' }),
+        query: () => ({ util: 'QUERY' }),
+        reqform: () => ({ util: 'REQFORM' }),
+        request: () => ({ util: 'REQUEST' }),
+        resbasic: () => ({ util: 'RESBASIC' }),
+        resbody: () => ({ util: 'RESBODY' }),
+        resform: () => ({ util: 'RESFORM' }),
+        resheaders: () => ({ util: 'RESHEADERS' }),
+        response: () => ({ util: 'RESPONSE' }),
+        result: () => ({ util: 'RESULT' }),
+        spec: () => ({ util: 'SPEC' }),
+      }
+    })
+
     const u: any = client.utility()
 
     equal(u.auth().util, 'AUTH')

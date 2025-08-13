@@ -3,45 +3,31 @@ import { Context } from '../types'
 
 
 import {
-  walk, getpath, escre, getprop, size, pad, slice, setprop, clone
+  walk, size, pad, slice, clone
 } from './StructUtility'
 
 
 // Clean request data by partially hiding sensitive values.
 function clean(ctx: Context, val: any) {
   const options = ctx.options
-  const work = ctx.work
 
-  let cleaners = getprop(work, 'cleaners')
+  const cleankeyre = options.__derived__.clean.keyre
+  const hintsize = 4
 
-  if (null == cleaners) {
-    cleaners =
-      [
-        { p: 'apikey', s: 4 }
-      ]
-        .map((p: any) => (p.v = getpath(options, p.p), p))
-        .filter(p => null != p.v && 'string' === typeof p.v)
-        .map(
-          p => (
-            p.re = new RegExp(escre(p.v)),
-            p.v = pad(slice(p.v, 0, p.s), size(p.v), '*'),
-            p
-          )
-        )
+  /*
+  if (null != cleankeyre) {
+    val = walk(clone(val), (key: any, subval: any) => {
+      if (cleankeyre.exec(key) && 'string' === typeof subval) {
+        const len = size(subval)
+        const hint = (hintsize * 4) < len ? slice(subval, 0, hintsize) : ''
+        subval = pad(hint, len, '*')
+      }
+      return subval
+    })
   }
+  */
 
-  setprop(work, 'cleaners', cleaners)
-
-  const out = walk(clone(val), (_k: any, v: any) => {
-    if ('string' === typeof v) {
-      cleaners.map((p: any) => {
-        v = v.replace(p.re, p.v)
-      })
-    }
-    return v
-  })
-
-  return out
+  return val
 }
 
 

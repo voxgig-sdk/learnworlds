@@ -1,3 +1,3 @@
-import { Context } from '../types';
-declare function request(ctx: Context): Promise<any>;
+import { Context, Response } from '../types';
+declare function request(ctx: Context): Promise<Response | Error>;
 export { request };

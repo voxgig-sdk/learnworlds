@@ -9,7 +9,7 @@ function done(ctx) {
         ctx.ctrl.explain = (0, CleanUtility_1.clean)(ctx, ctx.ctrl.explain);
         (0, StructUtility_1.delprop)(ctx.ctrl.explain.result, 'err');
     }
-    if (ctx.result.ok) {
+    if (ctx.result && ctx.result.ok) {
         return ctx.result.resdata;
     }
     return error(ctx);

@@ -1,7 +1,7 @@
 
 import { Context } from '../types'
 
-function fullurl(ctx: Context) {
+function fullurl(ctx: Context): Error | string {
   const utility = ctx.utility
   // const findparam = utility.findparam
 
@@ -9,6 +9,15 @@ function fullurl(ctx: Context) {
   const { escurl, escre, joinurl } = struct
 
   const { spec, result } = ctx
+
+  if (null == spec) {
+    return new Error('Expected context spec property to be defined.')
+  }
+
+  if (null == result) {
+    return new Error('Expected context result property to be defined.')
+  }
+
 
   let url = joinurl([spec.base, spec.prefix, spec.path, spec.suffix])
   let resmatch: Record<string, any> = {}

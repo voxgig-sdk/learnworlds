@@ -33,6 +33,8 @@ function makeReqdata(dm, transform, data) {
 // Validates data against validation rules and returns the result
 function makeValid(dm, validate, data, valid) {
     valid["`$OPEN`"] = true;
+    // console.log('MV', valid, data)
+    // console.dir(dm, { depth: null })
     return validate(data, valid, { meta: { '`$EXISTS`': true, dm } });
 }
 // Creates a control object for test explanations when enabled

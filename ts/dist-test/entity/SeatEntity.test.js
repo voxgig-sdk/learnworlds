@@ -49,8 +49,8 @@ const utility_1 = require("../utility");
             (0, utility_1.makeValid)(dm, validate, update_seat1.resdata, {
                 "`$OPEN`": true,
                 "id": "`dm$=s.load_seat0.match.id`",
-                "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`",
-                "title": "`dm$=s.update_seat1.reqdata.title`"
+                "title": "`dm$=s.update_seat1.reqdata.title`",
+                "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`"
             });
             // Step: load_seat2 - load seat
             const load_seat2 = (0, utility_1.makeStepData)(dm, 'load_seat2');
@@ -67,8 +67,8 @@ const utility_1 = require("../utility");
             (0, utility_1.makeValid)(dm, validate, load_seat2.resdata, {
                 "`$OPEN`": true,
                 "id": "`dm$=s.load_seat0.match.id`",
-                "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`",
-                "title": "`dm$=s.update_seat1.reqdata.title`"
+                "title": "`dm$=s.update_seat1.reqdata.title`",
+                "user_id": "`dm$=p.LEARNWORLDS_TEST_USER_ENTID.user01`"
             });
         }
         catch (err) {
@@ -76,6 +76,7 @@ const utility_1 = require("../utility");
             if (explain) {
                 console.dir(ctrl.explain, { depth: null });
             }
+            console.log(err);
             throw err;
         }
     });
@@ -170,7 +171,7 @@ function basicSetup(extra) {
     }
     setup.client = client;
     setup.struct = client.utility().struct;
-    setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN;
+    setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN;
     return setup;
 }
 //# sourceMappingURL=SeatEntity.test.js.map

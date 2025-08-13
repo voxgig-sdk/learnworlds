@@ -24,6 +24,7 @@ const utility_1 = require("../utility");
             if (explain) {
                 console.dir(ctrl.explain, { depth: null });
             }
+            console.log(err);
             throw err;
         }
     });
@@ -72,7 +73,7 @@ function basicSetup(extra) {
     }
     setup.client = client;
     setup.struct = client.utility().struct;
-    setup.explain = 'TRUE' === setup.dm.p.Learnworlds_TEST_EXPLAIN;
+    setup.explain = 'TRUE' === setup.dm.p.LEARNWORLDS_TEST_EXPLAIN;
     return setup;
 }
 //# sourceMappingURL=AffiliateEntity.test.js.map

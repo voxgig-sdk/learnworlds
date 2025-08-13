@@ -2,6 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.request = request;
 async function request(ctx) {
+    // PreRequest feature hook has already provided a result.
+    if (ctx.out.request) {
+        return ctx.out.request;
+    }
     const { spec, utility } = ctx;
     const { fullurl, fetcher } = utility;
     let response = {};
@@ -14,9 +18,16 @@ async function request(ctx) {
         err: undefined,
     };
     ctx.result = result;
+    if (null == spec) {
+        return new Error('Expected context spec property to be defined.');
+    }
     try {
         spec.step = 'prepare';
-        const url = spec.url = fullurl(ctx);
+        const url = fullurl(ctx);
+        if (url instanceof Error) {
+            throw url;
+        }
+        spec.url = url;
         const fetchdef = {
             method: spec.method,
             headers: spec.headers,
@@ -33,6 +44,9 @@ async function request(ctx) {
         response = await fetcher(ctx, url, fetchdef);
         if (null == response) {
             response = { err: new Error('response: undefined') };
+        }
+        else if (response instanceof Error) {
+            response = { err: response };
         }
     }
     catch (err) {
