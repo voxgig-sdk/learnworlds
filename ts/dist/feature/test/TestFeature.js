@@ -15,6 +15,7 @@ class TestFeature extends BaseFeature_1.BaseFeature {
         const { struct } = ctx.utility;
         const { walk, size, setprop, stringify } = struct;
         const entity = this._options.entity;
+        this._client._mode = 'test';
         // Set entity ids to correct values
         walk(entity, (k, v, parent, path) => {
             if (2 === size(path)) {

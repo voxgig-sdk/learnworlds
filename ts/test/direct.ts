@@ -27,14 +27,14 @@ async function run() {
         'Lw-Client': process.env.LEARNWORLDS_CLIENTID
       },
       allow: {
-        // op: ''
-        // method: ''
+        method: 'GET'
       }
     }
     // console.log(opts)
     const client = new LearnworldsSDK(opts)
 
     // console.log(client.options())
+    // console.log(await client.Course().list())
 
     let q: any = {}
 

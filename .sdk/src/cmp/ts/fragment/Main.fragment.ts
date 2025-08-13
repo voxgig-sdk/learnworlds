@@ -75,16 +75,15 @@ class ProjectNameSDK {
 
 
   static test(testopts?: any, sdkopts?: any) {
-    const active = null == testopts ? false : null == testopts.active ? true : !!testopts.active
-    testopts = testopts || {}
-    testopts.active = active
-
     sdkopts = sdkopts || {}
     sdkopts.feature = sdkopts.feature || {}
     sdkopts.feature.test = testopts || {}
     sdkopts.feature.test.active = true
 
-    return new ProjectNameSDK(sdkopts)
+    const testsdk = new ProjectNameSDK(sdkopts)
+    testsdk._mode = 'test'
+
+    return testsdk
   }
 
 

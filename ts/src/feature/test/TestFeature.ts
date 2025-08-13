@@ -25,6 +25,8 @@ class TestFeature extends BaseFeature {
 
     const entity = this._options.entity
 
+    this._client._mode = 'test'
+
     // Set entity ids to correct values
     walk(entity, (k: any, v: any, parent: any, path: any) => {
       if (2 === size(path)) {

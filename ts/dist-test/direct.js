@@ -18,13 +18,13 @@ async function run() {
                 'Lw-Client': process.env.LEARNWORLDS_CLIENTID
             },
             allow: {
-            // op: ''
-            // method: ''
+                method: 'GET'
             }
         };
         // console.log(opts)
         const client = new __1.LearnworldsSDK(opts);
         // console.log(client.options())
+        // console.log(await client.Course().list())
         let q = {};
         // // works
         const u0 = client.User();

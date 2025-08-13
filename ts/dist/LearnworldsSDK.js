@@ -237,14 +237,13 @@ class LearnworldsSDK {
         return new UserSubscriptionEntity_1.UserSubscriptionEntity(self, data);
     }
     static test(testopts, sdkopts) {
-        const active = null == testopts ? false : null == testopts.active ? true : !!testopts.active;
-        testopts = testopts || {};
-        testopts.active = active;
         sdkopts = sdkopts || {};
         sdkopts.feature = sdkopts.feature || {};
         sdkopts.feature.test = testopts || {};
         sdkopts.feature.test.active = true;
-        return new LearnworldsSDK(sdkopts);
+        const testsdk = new LearnworldsSDK(sdkopts);
+        testsdk._mode = 'test';
+        return testsdk;
     }
     tester(testopts, sdkopts) {
         return LearnworldsSDK.test(testopts, sdkopts);
